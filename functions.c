@@ -37,3 +37,48 @@ int print_string(va_list args)
  *
  * Return: number of characters printed
  */
+int print_percent(va_list args)
+{
+	(void)args;
+	_putchar('%');
+	return (1);
+}
+/**
+ * print_integer - prints an integer
+ * @args: va_list containing the integer to print
+ *
+ * Return: number of characters printed
+ */
+int print_integer(va_list args)
+{
+	int num = va_arg(args, int);
+	int count = 0;
+
+	if (num < 0)
+	{
+		_putchar('-');
+		count++;
+		num = -num;
+	}
+	if (num / 10)
+		count += print_integer_helper(num / 10);
+	_putchar(num % 10 + '0');
+	count++;
+	return (count);
+}
+/**
+ * print_integer_helper - helper function for print_integer
+ * @num: integer to print
+ *
+ * Return: number of digits printed
+ */
+int print_integer_helper(int num)
+{
+	int count = 0;
+
+	if (num / 10)
+		count += print_integer_helper(num / 10);
+	_putchar(num % 10 + '0');
+	count++;
+	return (count);
+}
