@@ -1,3 +1,4 @@
+#include "main.h"
 #include <stddef.h>
 /**
  * print_char - print a single character
