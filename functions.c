@@ -9,6 +9,7 @@
 int print_char(va_list args)
 {
 	char c = va_arg(args, int);
+
 	_putchar(c);
 	return (1);
 }
@@ -22,6 +23,7 @@ int print_string(va_list args)
 {
 	char *str = va_arg(args, char *);
 	int count = 0;
+
 	if (str == NULL)
 		str = "(null)";
 	while (*str != '\0')
@@ -45,15 +47,16 @@ int print_percent(va_list args)
 	return (1);
 }
 /**
- * print_integer - prints an integer
- * @args: va_list containing the integer to print
+ * print_integer - Prints a signed integer in decimal format
+ * @args: List of arguments
  *
- * Return: number of characters printed
+ * Return: Number of characters printed
  */
 int print_integer(va_list args)
 {
 	int num = va_arg(args, int);
-	int count = 0;
+	char buffer[20];
+	int i = 0, count = 0;
 
 	if (num < 0)
 	{
@@ -61,25 +64,24 @@ int print_integer(va_list args)
 		count++;
 		num = -num;
 	}
-	if (num / 10)
-		count += print_integer_helper(num / 10);
-	_putchar(num % 10 + '0');
-	count++;
-	return (count);
-}
-/**
- * print_integer_helper - helper function for print_integer
- * @num: integer to print
- *
- * Return: number of digits printed
- */
-int print_integer_helper(int num)
-{
-	int count = 0;
 
-	if (num / 10)
-		count += print_integer_helper(num / 10);
-	_putchar(num % 10 + '0');
-	count++;
+	if (num == 0)
+	{
+		_putchar('0');
+		return (1);
+	}
+
+	while (num > 0)
+	{
+		buffer[i++] = (num % 10) + '0';
+		num = num / 10;
+	}
+
+	while (i > 0)
+	{
+		_putchar(buffer[--i]);
+		count++;
+	}
+
 	return (count);
 }
