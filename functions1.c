@@ -1,19 +1,76 @@
 #include "main.h"
+#include <stdarg.h>
+#include <unistd.h>
+
 /**
- * print_unsigned - Prints an unsigned integer
- * @args: List of arguments
+ * print_c - prints a char
+ * @args: the argument list
  *
- * Return: Number of characters printed
+ * Return: the number of characters printed
  */
-int print_unsigned(va_list args)
+int print_c(va_list args)
 {
-	unsigned int num = va_arg(args, unsigned int);
+	char c = va_arg(args, int);
+
+	write(1, &c, 1);
+	return (1);
+}
+
+/**
+ * print_s - prints a string
+ * @args: the argument list
+ *
+ * Return: the number of characters printed
+ */
+int print_s(va_list args)
+{
+	char *str;
+	int len = 0;
+
+	str = va_arg(args, char *);
+	if (str == NULL)
+		str = "(null)";
+	while (*str)
+	{
+		len += write(1, str, 1);
+		str++;
+	}
+	return (len);
+}
+
+/**
+ * print_p - prints a percent sign
+ * @args: the argument list
+ *
+ * Return: the number of characters printed
+ */
+int print_p(va_list args)
+{
+	(void)args;
+	return (write(1, "%", 1));
+}
+/**
+ * print_d - function that prints an integer
+ * @args: va_list containing the integer to print
+ *
+ * Return: number of characters printed
+ */
+int print_d(va_list args)
+{
+	int num = va_arg(args, int);
 	char buffer[20];
 	int i = 0, count = 0;
 
+	if (num < 0)
+	{
+		write(1, "-", 1);
+		count++;
+		num = -num;
+	}
+
 	if (num == 0)
 	{
-		_putchar('0');
+		write(1, "0", 1);
 		return (1);
 	}
 
@@ -25,117 +82,10 @@ int print_unsigned(va_list args)
 
 	while (i > 0)
 	{
-		_putchar(buffer[--i]);
-		count++;
-	}
-
-	return (count);
-}
-/**
- * print_octal - Prints an unsigned int in octal
- * @args: List of arguments
- *
- * Return: Number of characters printed
- */
-int print_octal(va_list args)
-{
-	unsigned int num = va_arg(args, unsigned int);
-	char buffer[20];
-	int i = 0, count = 0;
-
-	if (num == 0)
-	{
-		_putchar('0');
-		return (1);
-	}
-
-	while (num > 0)
-	{
-		buffer[i++] = (num % 8) + '0';
-		num = num / 8;
-	}
-
-	while (i > 0)
-	{
-		_putchar(buffer[--i]);
+		write(1, &buffer[--i], 1);
 		count++;
 	}
 
 	return (count);
 }
 
-/**
- * print_hex - Prints an unsigned int in lowercase hexadecimal
- * @args: List of arguments
- *
- * Return: Number of characters printed
- */
-int print_hex(va_list args)
-{
-	unsigned int num = va_arg(args, unsigned int);
-	char buffer[20];
-	int i = 0, count = 0;
-
-	if (num == 0)
-	{
-		_putchar('0');
-		return (1);
-	}
-
-	while (num > 0)
-	{
-		int remainder = num % 16;
-
-		if (remainder < 10)
-			buffer[i++] = remainder + '0';
-		else
-			buffer[i++] = remainder - 10 + 'a';
-		num = num / 16;
-	}
-
-	while (i > 0)
-	{
-		_putchar(buffer[--i]);
-		count++;
-	}
-
-	return (count);
-}
-
-/**
- * print_HEX - Prints an unsigned int in uppercase hexadecimal
- * @args: List of arguments
- *
- * Return: Number of characters printed
- */
-int print_HEX(va_list args)
-{
-	unsigned int num = va_arg(args, unsigned int);
-	char buffer[20];
-	int i = 0, count = 0;
-
-	if (num == 0)
-	{
-		_putchar('0');
-		return (1);
-	}
-
-	while (num > 0)
-	{
-		int remainder = num % 16;
-
-		if (remainder < 10)
-			buffer[i++] = remainder + '0';
-		else
-			buffer[i++] = remainder - 10 + 'A';
-		num = num / 16;
-	}
-
-	while (i > 0)
-	{
-		_putchar(buffer[--i]);
-		count++;
-	}
-
-	return (count);
-}
