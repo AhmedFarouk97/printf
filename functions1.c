@@ -45,18 +45,12 @@ int print_s(va_list args)
  */
 int print_p(va_list args)
 {
-	char str[2];
+	char *str = va_arg(args, char*);
 	int i = 0;
-	(void)args;
 
-	str[1] = '\0';
-	str[0] = '%';
+	if (*str && str[i + 1] == '\0' && str[i] == '%')
+		return (-1);
+
 	write(1, "%", 1);
-
-	while (str[i])
-	{
-		_putchar(str[i]);
-		i++;
-	}
 	return (1);
 }
