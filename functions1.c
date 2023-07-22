@@ -1,6 +1,4 @@
 #include "main.h"
-#include <stdarg.h>
-#include <unistd.h>
 
 /**
  * print_c - prints a char
@@ -10,9 +8,10 @@
  */
 int print_c(va_list args)
 {
-	char c = va_arg(args, int);
+	char c;
 
-	write(1, &c, 1);
+	c = va_arg(args, int);
+	_putchar(c);
 	return (1);
 }
 
@@ -24,18 +23,25 @@ int print_c(va_list args)
  */
 int print_s(va_list args)
 {
-	char *str;
-	int len = 0;
+	char *s;
+	int i, len = 0;
 
-	str = va_arg(args, char *);
-	if (str == NULL)
-		str = "(null)";
-	while (*str)
+	s = va_arg(args, char *);
+	for (i = 0; s[i]; i++)
+		len++;
+	if (s == NULL)
 	{
-		len += write(1, str, 1);
-		str++;
+		s = "(null)";
+		for (i = 0; i < len; i++)
+			_putchar(s[i]);
+		return (len);
 	}
-	return (len);
+	else
+	{
+		for (i = 0; i < len; i++)
+			_putchar(s[i]);
+		return (len);
+	}
 }
 
 /**
@@ -47,8 +53,9 @@ int print_s(va_list args)
 int print_p(va_list args)
 {
 	(void)args;
-	return (write(1, "%", 1));
-}
+
+	_putchar(37);
+	return (1);}
 /**
  * print_d - function that prints an integer
  * @args: va_list containing the integer to print
@@ -88,4 +95,3 @@ int print_d(va_list args)
 
 	return (count);
 }
-
