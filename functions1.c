@@ -8,10 +8,9 @@
  */
 int print_c(va_list args)
 {
-	char c;
+	char c = va_arg(args, int);
 
-	c = va_arg(args, int);
-	_putchar(c);
+	write(1, &c, 1);
 	return (1);
 }
 
@@ -23,25 +22,16 @@ int print_c(va_list args)
  */
 int print_s(va_list args)
 {
-	char *s;
-	int i, len = 0;
+	char *s = va_arg(args, char*);
+	int len = 0;
 
-	s = va_arg(args, char *);
-	for (i = 0; s[i]; i++)
+	while (*s != '\0')
+	{
+		write(1, s, 1);
+		s++;
 		len++;
-	if (s == NULL)
-	{
-		s = "(null)";
-		for (i = 0; i < len; i++)
-			_putchar(s[i]);
-		return (len);
 	}
-	else
-	{
-		for (i = 0; i < len; i++)
-			_putchar(s[i]);
-		return (len);
-	}
+	return (len);
 }
 
 /**
@@ -54,9 +44,10 @@ int print_p(va_list args)
 {
 	(void)args;
 
-	_putchar(37);
+	write(1, "%", 1);
 	return (1);
 }
+
 /**
  * print_d - function that prints an integer
  * @args: va_list containing the integer to print
