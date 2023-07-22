@@ -22,6 +22,8 @@ int _printf(const char *format, ...)
 	{
 		if (format[i] == '%')
 		{
+			if (format[i + 1] == '\0')
+				return (-1);
 			for (j = 0; specifiers[j].spec; j++)
 			{
 				if (format[i + 1] == *specifiers[j].spec)
