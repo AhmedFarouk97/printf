@@ -19,7 +19,7 @@ int loop_format_string(const char *format, va_list args, spec_t *specifiers)
 	{
 		if (format[i] == '%')
 		{
-			if (format[i + 1] == '\0')
+			if (format[i + 1] == '\0' || format[i + 1] == ' ')
 				return (-1);
 			for (j = 0; specifiers[j].spec; j++)
 			{
