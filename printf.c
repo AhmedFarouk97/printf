@@ -19,22 +19,22 @@ int _printf(const char *format, ...)
 	};
 
 	va_start(args, format);
-	while (format && format[i]) /* loop through string. */
+	while (format && format[i])
 	{
-		if (format[i] == '%') /* if % is found */
+		if (format[i] == '%')
 		{
 			j = 0;
-			while (list[j].valid_types) /* loops through specifiers to find a valid one */
+			while (list[j].valid_types)
 			{
-				if (format[i + 1] == *(list[j].valid_types)) /* if find a valid specifier */
+				if (format[i + 1] == *(list[j].valid_types))
 				{
-					count += list[j].f(args); /* print specifier and add return value to count */
+					count += list[j].f(args);
 					break;
 				}
-				j++; /* keep loopint until a valid specifier is found. */
+				j++;
 			}
 			if (!list[j].valid_types)
-			{							/* in case not valid specifier - print normally */
+			{
 				_putchar(format[i]);
 				_putchar(format[i + 1]);
 			}
