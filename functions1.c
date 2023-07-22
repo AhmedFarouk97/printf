@@ -55,7 +55,8 @@ int print_p(va_list args)
 	(void)args;
 
 	_putchar(37);
-	return (1);}
+	return (1);
+}
 /**
  * print_d - function that prints an integer
  * @args: va_list containing the integer to print
