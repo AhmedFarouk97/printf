@@ -1,23 +1,20 @@
 #include "main.h"
-
 /**
- * _printf - prints a formatted string to stdout
+ * loop_format_string - loops over the format string and handles the specifiers
  * @format: pointer to the format string
+ * @args: va_list of arguments to print
+ * @specifiers: array of specifiers to check against
  *
  * Return: the number of characters printed
  */
-int _printf(const char *format, ...)
+int loop_format_string(const char *format, va_list args, spec_t *specifiers)
 {
-	va_list args;
 	int i, j, len = 0;
 
-	spec_t specifiers[] = {
-		{"c", print_c},
-		{"s", print_s},
-		{"%", print_p},
-		{NULL, NULL}
-	};
-	va_start(args, format);
+	if (format == NULL)
+		return (-1);
+	if (format[0] == '\0')
+		return (0);
 	for (i = 0; format && format[i]; i++)
 	{
 		if (format[i] == '%')
@@ -45,6 +42,30 @@ int _printf(const char *format, ...)
 			len++;
 		}
 	}
+
+	return (len);
+}
+/**
+ * _printf - prints a formatted string to stdout
+ * @format: pointer to the format string
+ *
+ * Return: the number of characters printed
+ */
+int _printf(const char *format, ...)
+{
+	va_list args;
+	int len = 0;
+
+	spec_t specifiers[] = {
+		{"c", print_c},
+		{"s", print_s},
+		{"%", print_p},
+		{NULL, NULL}
+	};
+
+	va_start(args, format);
+	len = loop_format_string(format, args, specifiers);
 	va_end(args);
+
 	return (len);
 }
