@@ -45,7 +45,7 @@ int print_s(va_list args)
  */
 int print_p(va_list args)
 {
-	args (void);
+	(void) args;
 
 	write(1, "%", 1);
 	return (1);
