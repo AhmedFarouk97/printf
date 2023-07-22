@@ -8,10 +8,10 @@
  */
 int print_c(va_list args)
 {
-    char c = va_arg(args, int);
+	char c = va_arg(args, int);
 
-    write(1, &c, 1);
-    return (1);
+	write(1, &c, 1);
+	return (1);
 }
 
 /**
@@ -45,48 +45,18 @@ int print_s(va_list args)
  */
 int print_p(va_list args)
 {
-    (void)args;
+	char str[2];
+	int i = 0;
+	(void)args;
 
-    write(1, "%", 1);
-    return (1);
-}
+	str[1] = '\0';
+	str[0] = '%';
+	write(1, "%", 1);
 
-/**
- * print_d - function that prints an integer
- * @args: va_list containing the integer to print
- *
- * Return: number of characters printed
- */
-int print_d(va_list args)
-{
-	int num = va_arg(args, int);
-	char buffer[20];
-	int i = 0, count = 0;
-
-	if (num < 0)
+	while (str[i])
 	{
-		write(1, "-", 1);
-		count++;
-		num = -num;
+		_putchar(str[i]);
+		i++;
 	}
-
-	if (num == 0)
-	{
-		write(1, "0", 1);
-		return (1);
-	}
-
-	while (num > 0)
-	{
-		buffer[i++] = (num % 10) + '0';
-		num = num / 10;
-	}
-
-	while (i > 0)
-	{
-		write(1, &buffer[--i], 1);
-		count++;
-	}
-
-	return (count);
+	return (1);
 }
