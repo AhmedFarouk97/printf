@@ -19,10 +19,12 @@ typedef struct specifier
 	int (*f)(va_list);
 } spec_t;
 
-int _putchar(char c);
 int _printf(const char *format, ...);
 int print_c(va_list args);
 int print_s(va_list args);
 int print_p(va_list args);
+int print_d(va_list args);
+
+int _putchar(char c);
 
 #endif /* MAIN_H */
