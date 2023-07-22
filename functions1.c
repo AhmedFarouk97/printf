@@ -45,11 +45,7 @@ int print_s(va_list args)
  */
 int print_p(va_list args)
 {
-	char *str = va_arg(args, char*);
-	int i = 0;
-
-	if (*str && str[i + 1] == '\0' && str[i] == '%')
-		return (-1);
+	args (void);
 
 	write(1, "%", 1);
 	return (1);
