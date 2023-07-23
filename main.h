@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <unistd.h>
-
+#include <limits.h>
 /**
  * struct specifier - Struct to map format specifiers to their corresponding
  * printing function

@@ -50,34 +50,3 @@ int print_p(va_list args)
 	write(1, "%", 1);
 	return (1);
 }
-/**
- * print_d - prints an integer
- * @args: the argument list
- *
- * Return: the number of characters printed
- */
-int print_d(va_list args)
-{
-	int num = va_arg(args, int);
-	int len = 0, divisor = 1;
-
-	if (num < 0)
-	{
-		len += _putchar('-');
-		num = -num;
-	}
-	if (num == 0)
-	{
-		len += _putchar('0');
-		return (len);
-	}
-	while (num / divisor > 9)
-		divisor *= 10;
-	while (divisor != 0)
-	{
-		len += _putchar(num / divisor + '0');
-		num %= divisor;
-		divisor /= 10;
-	}
-	return (len);
-}
