@@ -1,3 +1,4 @@
+#include "main.h"
 /**
  * print_b - prints an unsigned int in binary format
  * @args: the argument list
@@ -7,7 +8,7 @@
 int print_b(va_list args)
 {
 	unsigned int num = va_arg(args, unsigned int);
-	int len = 0;
+	int len = 0, i;
 	char buffer[1024];
 
 	do {
@@ -18,7 +19,7 @@ int print_b(va_list args)
 	buffer[len] = '\0';
 
 	/* Reverse the string */
-	for (int i = 0; i < len / 2; i++)
+	for (i = 0; i < len / 2; i++)
 	{
 		char temp = buffer[i];
 
