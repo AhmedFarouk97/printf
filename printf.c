@@ -13,8 +13,6 @@ int loop_format_string(const char *format, va_list args, spec_t *specifiers)
 
 	if (format == NULL)
 		return (-1);
-	if (format[0] == '\0')
-		return (0);
 	for (i = 0; format && format[i]; i++)
 	{
 		if (format[i] == '%')
