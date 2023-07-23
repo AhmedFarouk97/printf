@@ -44,24 +44,7 @@ int print_s(va_list args, char *buffer, int buffer_size)
 	}
 	return (len);
 }
-/**
- * print_p - prints a percent sign
- * @args: the argument list
- * @buffer: the buffer to write to
- * @buffer_size: the size of the buffer
- *
- * Return: the number of characters printed
- */
-int print_p(va_list args, char *buffer, int buffer_size)
-{
-	(void) args;
 
-	if (buffer_size < 1)
-		return (-1);
-
-	buffer[0] = '%';
-	return (1);
-}
 /**
  * print_d - prints a decimal (int) number
  * @args: the argument list
@@ -113,4 +96,3 @@ int print_d(va_list args, char *buffer, int buffer_size)
 
 	return (len);
 }
-

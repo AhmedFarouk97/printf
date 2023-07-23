@@ -24,7 +24,6 @@ typedef struct specifier
 int _printf(const char *format, ...);
 int print_c(va_list args, char *buffer, int buffer_size);
 int print_s(va_list args, char *buffer, int buffer_size);
-int print_p(va_list args, char *buffer, int buffer_size);
 int print_d(va_list args, char *buffer, int buffer_size);
 int print_b(va_list args, char *buffer, int buffer_size);
 int print_u(va_list args, char *buffer, int buffer_size);

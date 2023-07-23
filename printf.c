@@ -7,12 +7,11 @@
  * @specifiers: array of specifiers to check against
  * @buffer: the output buffer
  * @buffer_index: the current index in the buffer
- * @buffer_size: the size of the buffer
  *
  * Return: the number of characters printed
  */
 int handle_specifier(const char *format, va_list args, spec_t *specifiers,
-		     char *buffer, int *buffer_index, int buffer_size)
+		     char *buffer, int *buffer_index)
 {
 	int j, printed_chars, len = 0;
 
@@ -21,7 +20,7 @@ int handle_specifier(const char *format, va_list args, spec_t *specifiers,
 		if (format[1] == *specifiers[j].spec)
 		{
 			printed_chars = specifiers[j].f(args, buffer + *buffer_index,
-							buffer_size - *buffer_index);
+							BUFFER_SIZE - *buffer_index);
 			if (printed_chars < 0)
 				return (-1);
 			len += printed_chars;
@@ -31,7 +30,7 @@ int handle_specifier(const char *format, va_list args, spec_t *specifiers,
 	}
 	if (!specifiers[j].spec && format[1] != '\0')
 	{
-		if (*buffer_index >= buffer_size)
+		if (*buffer_index >= BUFFER_SIZE)
 		{
 			write(1, buffer, *buffer_index);
 			*buffer_index = 0;
@@ -50,15 +49,13 @@ int handle_specifier(const char *format, va_list args, spec_t *specifiers,
  * @format: pointer to the format string
  * @args: va_list of arguments to print
  * @specifiers: array of specifiers to check against
- * @buffer: the output buffer
- * @buffer_size: the size of the buffer
  *
  * Return: the number of characters printed
  */
-int loop_format_string(const char *format, va_list args, spec_t *specifiers,
-		       char *buffer, int buffer_size)
+int loop_format_string(const char *format, va_list args, spec_t *specifiers)
 {
 	int i, len = 0;
+	char buffer[BUFFER_SIZE];
 	int buffer_index = 0;
 
 	if (format == NULL)
@@ -70,12 +67,12 @@ int loop_format_string(const char *format, va_list args, spec_t *specifiers,
 			if (format[i + 1] == '\0' || format[i + 1] == ' ')
 				return (-1);
 			len += handle_specifier(format + i, args, specifiers,
-							buffer, &buffer_index, buffer_size);
+							buffer, &buffer_index);
 			i++;
 		}
 		else
 		{
-			if (buffer_index >= buffer_size)
+			if (buffer_index >= BUFFER_SIZE)
 			{
 				write(1, buffer, buffer_index);
 				buffer_index = 0;
@@ -89,7 +86,6 @@ int loop_format_string(const char *format, va_list args, spec_t *specifiers,
 
 	return (len);
 }
-
 /**
  * _printf - prints a formatted string to stdout
  * @format: pointer to the format string
@@ -100,12 +96,10 @@ int _printf(const char *format, ...)
 {
 	va_list args;
 	int len = 0;
-	char buffer[BUFFER_SIZE];
 
 	spec_t specifiers[] = {
 		{"c", print_c},
 		{"s", print_s},
-		{"p", print_p},
 		{"d", print_d},
 		{"i", print_d},
 		{"b", print_b},
@@ -117,7 +111,7 @@ int _printf(const char *format, ...)
 	};
 
 	va_start(args, format);
-	len = loop_format_string(format, args, specifiers, buffer, BUFFER_SIZE);
+	len = loop_format_string(format, args, specifiers);
 	va_end(args);
 
 	return (len);
