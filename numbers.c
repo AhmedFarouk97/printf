@@ -1,37 +1,6 @@
 #include "main.h"
 /**
- * num_len - gets the length of an integer
- * @num: the integer
- *
- * Return: the length of the integer
- */
-int num_len(int num)
-{
-	int len = 0;
-
-	while (num > 0)
-	{
-		num /= 10;
-		len++;
-	}
-
-	return (len);
-}
-
-/**
- * print_number - prints an integer
- * @num: the integer
- */
-void print_number(int num)
-{
-	if (num == 0)
-		return;
-
-	print_number(num / 10);
-	_putchar(num % 10 + '0');
-}
-/**
- * print_d - prints an integer
+ * print_d - prints a decimal (int) number
  * @args: the argument list
  *
  * Return: the number of characters printed
@@ -39,31 +8,41 @@ void print_number(int num)
 int print_d(va_list args)
 {
 	int num = va_arg(args, int);
-	int len = 0, negative = 0;
-
-	if (num == 0)
-	{
-		_putchar('0');
-		return (1);
-	}
+	int len = 0, i;
+	int is_negative = 0;
+	char buffer[1024];
+	unsigned int n;
 
 	if (num < 0)
 	{
-		negative = 1;
-		len++;
+		is_negative = 1;
 		if (num == INT_MIN)
-		{
-			_putchar('-');
-			return (11);
-		}
-		num = -num;
+			n = (unsigned int)INT_MAX + 1;
+		else
+			n = (unsigned int)(-num);
+	}
+	else
+		n = (unsigned int)num;
+
+	do {
+		buffer[len++] = (n % 10) + '0';
+		n /= 10;
+	} while (n > 0);
+
+	if (is_negative)
+		buffer[len++] = '-';
+
+	buffer[len] = '\0';
+
+	/* Reverse the string */
+	for (i = 0; i < len / 2; i++)
+	{
+		char temp = buffer[i];
+
+		buffer[i] = buffer[len - i - 1];
+		buffer[len - i - 1] = temp;
 	}
 
-	len += num_len(num);
-	if (negative)
-		_putchar('-');
-
-	print_number(num);
-
+	write(1, buffer, len);
 	return (len);
 }
