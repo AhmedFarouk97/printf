@@ -1,4 +1,49 @@
 #include "main.h"
+
+/**
+ * handle_specifier - handles a single specifier
+ * @format: pointer to the format string
+ * @args: va_list of arguments to print
+ * @specifiers: array of specifiers to check against
+ * @buffer: the output buffer
+ * @buffer_index: the current index in the buffer
+ *
+ * Return: the number of characters printed
+ */
+int handle_specifier(const char *format, va_list args, spec_t *specifiers,
+		     char *buffer, int *buffer_index)
+{
+	int j, printed_chars, len = 0;
+
+	for (j = 0; specifiers[j].spec; j++)
+	{
+		if (format[1] == *specifiers[j].spec)
+		{
+			printed_chars = specifiers[j].f(args, buffer + *buffer_index,
+							BUFFER_SIZE - *buffer_index);
+			if (printed_chars < 0)
+				return (-1);
+			len += printed_chars;
+			*buffer_index += printed_chars;
+			break;
+		}
+	}
+	if (!specifiers[j].spec && format[1] != '\0')
+	{
+		if (*buffer_index >= BUFFER_SIZE)
+		{
+			write(1, buffer, *buffer_index);
+			*buffer_index = 0;
+		}
+		buffer[(*buffer_index)++] = format[0];
+		if (format[1] == '%')
+			format++;
+		len++;
+	}
+
+	return (len);
+}
+
 /**
  * loop_format_string - loops over the format string and handles the specifiers
  * @format: pointer to the format string
@@ -9,7 +54,9 @@
  */
 int loop_format_string(const char *format, va_list args, spec_t *specifiers)
 {
-	int i, j, len = 0;
+	int i, len = 0;
+	char buffer[BUFFER_SIZE];
+	int buffer_index = 0;
 
 	if (format == NULL)
 		return (-1);
@@ -19,27 +66,23 @@ int loop_format_string(const char *format, va_list args, spec_t *specifiers)
 		{
 			if (format[i + 1] == '\0' || format[i + 1] == ' ')
 				return (-1);
-			for (j = 0; specifiers[j].spec; j++)
-			{
-				if (format[i + 1] == *specifiers[j].spec)
-				{
-					len += specifiers[j].f(args);
-					i++;
-					break;
-				}
-			}
-			if (!specifiers[j].spec && format[i + 1] != '\0')
-			{
-				write(1, &format[i], 1);
-				len++;
-			}
+			len += handle_specifier(format + i, args, specifiers,
+							buffer, &buffer_index);
+			i++;
 		}
 		else
 		{
-			write(1, &format[i], 1);
+			if (buffer_index >= BUFFER_SIZE)
+			{
+				write(1, buffer, buffer_index);
+				buffer_index = 0;
+			}
+			buffer[buffer_index++] = format[i];
 			len++;
 		}
 	}
+	if (buffer_index > 0)
+		write(1, buffer, buffer_index);
 
 	return (len);
 }
@@ -57,7 +100,7 @@ int _printf(const char *format, ...)
 	spec_t specifiers[] = {
 		{"c", print_c},
 		{"s", print_s},
-		{"%", print_p},
+		{"p", print_p},
 		{"d", print_d},
 		{"i", print_d},
 		{"b", print_b},
