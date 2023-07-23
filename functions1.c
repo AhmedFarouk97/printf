@@ -44,7 +44,6 @@ int print_s(va_list args, char *buffer, int buffer_size)
 	}
 	return (len);
 }
-
 /**
  * print_d - prints a decimal (int) number
  * @args: the argument list

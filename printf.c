@@ -1,5 +1,21 @@
 #include "main.h"
-
+/**
+ * handle_percent - handles the case where the format string contains %%
+ * @buffer: pointer to the output buffer
+ * @buffer_index: pointer to the current position in the output buffer
+ *
+ * Return: the number of characters printed
+ */
+static int handle_percent(char *buffer, int *buffer_index)
+{
+	buffer[(*buffer_index)++] = '%';
+	if (*buffer_index >= BUFFER_SIZE)
+	{
+		write(1, buffer, BUFFER_SIZE);
+		*buffer_index = 0;
+	}
+	return (1);
+}
 /**
  * handle_specifier - handles a single specifier
  * @format: pointer to the format string
@@ -15,6 +31,8 @@ int handle_specifier(const char *format, va_list args, spec_t *specifiers,
 {
 	int j, printed_chars, len = 0;
 
+	if (format[1] == '%')
+		return (handle_percent(buffer, buffer_index));
 	for (j = 0; specifiers[j].spec; j++)
 	{
 		if (format[1] == *specifiers[j].spec)
@@ -30,17 +48,21 @@ int handle_specifier(const char *format, va_list args, spec_t *specifiers,
 	}
 	if (!specifiers[j].spec && format[1] != '\0')
 	{
+		buffer[(*buffer_index)++] = '%';
+		len++;
 		if (*buffer_index >= BUFFER_SIZE)
 		{
-			write(1, buffer, *buffer_index);
+			write(1, buffer, BUFFER_SIZE);
 			*buffer_index = 0;
 		}
-		buffer[(*buffer_index)++] = format[0];
-		if (format[1] == '%')
-			format++;
+		buffer[(*buffer_index)++] = format[1];
 		len++;
+		if (*buffer_index >= BUFFER_SIZE)
+		{
+			write(1, buffer, BUFFER_SIZE);
+			*buffer_index = 0;
+		}
 	}
-
 	return (len);
 }
 
@@ -60,7 +82,7 @@ int loop_format_string(const char *format, va_list args, spec_t *specifiers)
 
 	if (format == NULL)
 		return (-1);
-	for (i = 0; format && format[i]; i++)
+	for (i = 0; format[i]; i++)
 	{
 		if (format[i] == '%')
 		{
@@ -74,8 +96,8 @@ int loop_format_string(const char *format, va_list args, spec_t *specifiers)
 		{
 			if (buffer_index >= BUFFER_SIZE)
 			{
-				write(1, buffer, buffer_index);
-				buffer_index = 0;
+				write(1, buffer, BUFFER_SIZE);
+				buffer_index = 0; /* setting index back to 0 */
 			}
 			buffer[buffer_index++] = format[i];
 			len++;
@@ -96,7 +118,6 @@ int _printf(const char *format, ...)
 {
 	va_list args;
 	int len = 0;
-
 	spec_t specifiers[] = {
 		{"c", print_c},
 		{"s", print_s},
