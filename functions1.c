@@ -4,14 +4,16 @@
  * print_c - prints a char
  * @args: the argument list
  * @buffer: pointer to the buffer to print to
+ * @flags:  Calculates active flags
  *
  * Return: the number of characters printed
  */
-int print_c(va_list args, char *buffer)
+int print_c(va_list args, char *buffer, int flags)
 {
 	char c = va_arg(args, int);
 	int i = 0;
 
+	(void)flags;
 	buffer[i] = c;
 
 	return (write(1, &buffer[0], 1));
@@ -21,15 +23,17 @@ int print_c(va_list args, char *buffer)
  * print_s - prints a string
  * @args: the argument list
  * @buffer: pointer to the buffer to print to
+ * @flags:  Calculates active flags
  *
  * Return: the number of characters printed
  */
-int print_s(va_list args, char *buffer)
+int print_s(va_list args, char *buffer, int flags)
 {
 	char *s = va_arg(args, char*);
 	int len = 0, i;
 
 	(void)buffer;
+	(void)flags;
 
 	if (s == NULL)
 		s = "(null)";
@@ -41,16 +45,18 @@ int print_s(va_list args, char *buffer)
 	return (len);
 }
 /**
- * print_p - print percent
+ * print_5 - print percent
  * @args: the argument list
  * @buffer: pointer to the buffer to print to
+ * @flags:  Calculates active flags
  *
  * Return: the number of characters printed
  */
-int print_p(va_list args, char *buffer)
+int print_5(va_list args, char *buffer, int flags)
 {
 	(void)args;
 	(void)buffer;
+	(void)flags;
 
 	return (write(1, "%", 1));
 }
@@ -58,64 +64,52 @@ int print_p(va_list args, char *buffer)
  * print_d - Prints a number
  * @args: List of arguments
  * @buffer: Buffer array to handle print.
+ * @flags:  Calculates active flags
+ *
  * Return: Number of printed chars
  */
-int print_d(va_list args, char *buffer)
+int print_d(va_list args, char *buffer, int flags)
 {
+	int long n = va_arg(args, int);
 	int i = BUFFER_SIZE - 2;
-	int num = va_arg(args, int);
-	int len = 0;
 	int is_negative = 0;
 
-	if (num == 0)
-	{
+	if (n == 0)
 		buffer[i--] = '0';
-		len++;
-	}
-	else
+
+	buffer[BUFFER_SIZE - 1] = '\0';
+
+	if (n < 0)
 	{
-		if (num < 0)
-		{
-			is_negative = 1;
-			if (num == INT_MIN)
-			{
-				buffer[i--] = '8';
-				num = -(num / 10);
-				len++;
-			}
-			else
-				num = -num;
-		}
-		buffer[BUFFER_SIZE - 1] = '\0';
-		while (num > 0)
-		{
-			buffer[i--] = (num % 10) + '0';
-			num /= 10;
-			len++;
-		}
-		if (is_negative)
-		{
-			buffer[i--] = '-';
-			len++;
-		}
+		n = -1 * n;
+		is_negative = 1;
 	}
+
+	while (n > 0)
+	{
+		buffer[i--] = (n % 10) + '0';
+		n /= 10;
+	}
+
 	i++;
-	return (write(1, &buffer[i], len));
+	return (write_num(i, is_negative, buffer, flags));
 }
 /**
  * print_b - Prints an unsigned number
  * @args: Lista of arguments
  * @buffer: Buffer array to handle print
+ * @flags:  Calculates active flags
  *
  * Return: Numbers of char printed.
  */
-int print_b(va_list args, char *buffer)
+int print_b(va_list args, char *buffer, int flags)
 {
 	unsigned int n, m, i, sum;
 	unsigned int a[32];
 	int len;
 
 	(void)buffer;
+	(void)flags;
 
 	n = va_arg(args, unsigned int);
 	m = 2147483648;
