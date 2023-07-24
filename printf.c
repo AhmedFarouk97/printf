@@ -1,138 +1,100 @@
 #include "main.h"
-/**
- * handle_percent - handles the case where the format string contains %%
- * @buffer: pointer to the output buffer
- * @buffer_index: pointer to the current position in the output buffer
- *
- * Return: the number of characters printed
- */
-static int handle_percent(char *buffer, int *buffer_index)
-{
-	buffer[(*buffer_index)++] = '%';
-	if (*buffer_index >= BUFFER_SIZE)
-	{
-		write(1, buffer, BUFFER_SIZE);
-		*buffer_index = 0;
-	}
-	return (1);
-}
-/**
- * handle_specifier - handles a single specifier
- * @format: pointer to the format string
- * @args: va_list of arguments to print
- * @specifiers: array of specifiers to check against
- * @buffer: the output buffer
- * @buffer_index: the current index in the buffer
- *
- * Return: the number of characters printed
- */
-int handle_specifier(const char *format, va_list args, spec_t *specifiers,
-		     char *buffer, int *buffer_index)
-{
-	int j, printed_chars, len = 0;
 
-	if (format[1] == '%')
-		return (handle_percent(buffer, buffer_index));
-	for (j = 0; specifiers[j].spec; j++)
+/**
+ * print_buffer - Prints the contents of the buffer if it exist
+ * @buffer: Array of chars
+ * @buff_ind: Index at which to add next char, represents the length.
+ */
+void print_buffer(char buffer[], int *buff_ind)
+{
+	if (*buff_ind > 0)
+		write(1, &buffer[0], *buff_ind);
+
+	*buff_ind = 0;
+}
+#include "main.h"
+/**
+ * handle_spec - Prints an argument based on its type
+ * @format: Formatted string in which to print the arguments.
+ * @args: List of arguments to be printed.
+ * @ind: ind.
+ * @buffer: Buffer array to handle print.
+ *
+ * Return: 1 or 2;
+ */
+int handle_spec(const char *format, int *ind, va_list args, char *buffer)
+{
+	int i, unknow_len = 0, printed_chars = -1;
+	spec_t specifiers[] = {
+		{'c', print_c},
+		{'s', print_s},
+		{'%', print_p},
+		{'d', print_d},
+		{'i', print_d},
+		{'b', print_b},
+		{'u', print_u},
+		{'o', print_o},
+		{'x', print_x},
+		{'X', print_x},
+		{'\0', NULL}
+	};
+	for (i = 0; specifiers[i].spec; i++)
+		if (format[*ind] == specifiers[i].spec)
+			return (specifiers[i].f(args, buffer));
+
+	if (specifiers[i].spec == '\0')
 	{
-		if (format[1] == *specifiers[j].spec)
-		{
-			printed_chars = specifiers[j].f(args, buffer + *buffer_index,
-							BUFFER_SIZE - *buffer_index);
-			if (printed_chars < 0)
-				return (-1);
-			len += printed_chars;
-			*buffer_index += printed_chars;
-			break;
-		}
+		if (format[*ind] == '\0')
+			return (-1);
+		unknow_len += write(1, "%%", 1);
+		if (format[*ind - 1] == ' ')
+			unknow_len += write(1, " ", 1);
+		unknow_len += write(1, &format[*ind], 1);
+		return (unknow_len);
 	}
-	if (!specifiers[j].spec && format[1] != '\0')
-	{
-		buffer[(*buffer_index)++] = '%';
-		len++;
-		if (*buffer_index >= BUFFER_SIZE)
-		{
-			write(1, buffer, BUFFER_SIZE);
-			*buffer_index = 0;
-		}
-		buffer[(*buffer_index)++] = format[1];
-		len++;
-		if (*buffer_index >= BUFFER_SIZE)
-		{
-			write(1, buffer, BUFFER_SIZE);
-			*buffer_index = 0;
-		}
-	}
-	return (len);
+	return (printed_chars);
 }
 
-/**
- * loop_format_string - loops over the format string and handles the specifiers
- * @format: pointer to the format string
- * @args: va_list of arguments to print
- * @specifiers: array of specifiers to check against
- *
- * Return: the number of characters printed
- */
-int loop_format_string(const char *format, va_list args, spec_t *specifiers)
-{
-	int i, len = 0;
-	char buffer[BUFFER_SIZE];
-	int buffer_index = 0;
 
-	if (format == NULL)
-		return (-1);
-	for (i = 0; format[i]; i++)
-	{
-		if (format[i] == '%')
-		{
-			if (format[i + 1] == '\0' || format[i + 1] == ' ')
-				return (-1);
-			len += handle_specifier(format + i, args, specifiers,
-							buffer, &buffer_index);
-			i++;
-		}
-		else
-		{
-			if (buffer_index >= BUFFER_SIZE)
-			{
-				write(1, buffer, BUFFER_SIZE);
-				buffer_index = 0; /* setting index back to 0 */
-			}
-			buffer[buffer_index++] = format[i];
-			len++;
-		}
-	}
-	if (buffer_index > 0)
-		write(1, buffer, buffer_index);
-
-	return (len);
-}
 /**
- * _printf - prints a formatted string to stdout
- * @format: pointer to the format string
- *
- * Return: the number of characters printed
+ * _printf - Printf function
+ * @format: format.
+ * Return: Printed chars.
  */
 int _printf(const char *format, ...)
 {
+	int i, printed_char = 0, len = 0;
+	int buff_ind = 0;
 	va_list args;
-	int len = 0;
-	spec_t specifiers[] = {
-		{"c", print_c},
-		{"s", print_s},
-		{"d", print_d},
-		{"i", print_d},
-		{"b", print_b},
-		{"u", print_u},
-		{"o", print_o},
-		{"x", print_x},
-		{"X", print_X},
-		{NULL, NULL}
-	};
+	char buffer[BUFFER_SIZE];
+
+	if (format == NULL)
+		return (-1);
 
 	va_start(args, format);
-	len = loop_format_string(format, args, specifiers);
+
+	for (i = 0; format && format[i] != '\0'; i++)
+	{
+		if (format[i] == '%')
+		{
+			print_buffer(buffer, &buff_ind);
+			++i;
+			printed_char = handle_spec(format, &i, args, buffer);
+			if (printed_char == -1)
+				return (-1);
+			len += printed_char;
+		}
+		else
+		{
+			buffer[buff_ind++] = format[i];
+			if (buff_ind == BUFFER_SIZE)
+				print_buffer(buffer, &buff_ind);
+			len++;
+		}
+	}
+
+	print_buffer(buffer, &buff_ind);
+
 	va_end(args);
 
 	return (len);

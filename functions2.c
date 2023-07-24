@@ -1,193 +1,155 @@
 #include "main.h"
-#include "main.h"
 /**
- * print_b - prints an unsigned int in binary format
- * @args: the argument list
- * @buffer: buffer to store the printed string
- * @buffer_size: maximum size of the buffer
- *
- * Return: the number of characters printed
+ * print_u - Prints an unsigned number
+ * @args: List of arguments
+ * @buffer: Buffer array to handle print.
+ * Return: Number of printed chars
  */
-int print_b(va_list args, char *buffer, int buffer_size)
+int print_u(va_list args, char *buffer)
 {
+	int i = BUFFER_SIZE - 2;
 	unsigned int num = va_arg(args, unsigned int);
-	int len = 0, i;
+	unsigned int len = 0;
 
-	do {
-		if (len + 1 >= buffer_size)
-			return (-1); /* Not enough space in buffer */
-		buffer[len++] = (num % 2) + '0';
-		num /= 2;
-	} while (num > 0);
-
-	buffer[len] = '\0';
-
-	/* Reverse the string */
-	for (i = 0; i < len / 2; i++)
+	if (num == 0)
 	{
-		char temp = buffer[i];
-
-		buffer[i] = buffer[len - i - 1];
-		buffer[len - i - 1] = temp;
-	}
-
-	return (len);
-}
-/**
- * print_u - prints an unsigned int in decimal format
- * @args: the argument list
- * @buffer: the buffer to store the output
- * @buffer_size: the size of the buffer
- *
- * Return: the number of characters printed
- */
-int print_u(va_list args, char *buffer, int buffer_size)
-{
-	unsigned int num = va_arg(args, unsigned int);
-	int len = 0, i;
-
-	do {
-		if (len < buffer_size - 1)
-			buffer[len] = (num % 10) + '0';
+		buffer[i--] = '0';
 		len++;
-		num /= 10;
-	} while (num > 0);
-
-	/* Reverse the string */
-	for (i = 0; i < len / 2; i++)
+	}
+	else
 	{
-		char temp = buffer[i];
+		buffer[BUFFER_SIZE - 1] = '\0';
 
-		buffer[i] = buffer[len - i - 1];
-		buffer[len - i - 1] = temp;
+		while (num > 0)
+		{
+			buffer[i--] = (num % 10) + '0';
+			num /= 10;
+			len++;
+		}
 	}
 
-	if (len < buffer_size)
-		buffer[len] = '\0';
+	i++;
 
-	return (len);
+	return ((unsigned int)write(1, &buffer[i], len));
 }
 /**
- * print_o - prints an unsigned int in octal format
- * @args: the argument list
- * @buffer: the buffer to store the output
- * @buffer_size: the size of the buffer
+ * print_o - Prints octal
+ * @args: List of arguments
+ * @buffer: Buffer array to handle print.
  *
- * Return: the number of characters printed
+ * Return: Number of printed chars
  */
-int print_o(va_list args, char *buffer, int buffer_size)
+int print_o(va_list args, char *buffer)
 {
+	int i = BUFFER_SIZE - 2;
 	unsigned int num = va_arg(args, unsigned int);
-	int len = 0, i;
+	unsigned int len = 0;
 
-	if (buffer_size <= 0)
-		return (-1);
-
-	do {
-		if (len + 1 >= buffer_size)
-			break;
-		buffer[len++] = (num % 8) + '0';
-		num /= 8;
-	} while (num > 0);
-
-	if (len == buffer_size)
-		len--;
-
-	buffer[len] = '\0';
-
-	/* Reverse the string */
-	for (i = 0; i < len / 2; i++)
+	if (num == 0)
 	{
-		char temp = buffer[i];
+		buffer[i--] = '0';
+		len++;
+	}
+	else
+	{
+		buffer[BUFFER_SIZE - 1] = '\0';
 
-		buffer[i] = buffer[len - i - 1];
-		buffer[len - i - 1] = temp;
+		while (num > 0)
+		{
+			buffer[i--] = (num % 8) + '0';
+			num /= 8;
+			len++;
+		}
 	}
 
-	return (len);
-}
+	i++;
 
+	return ((unsigned int)write(1, &buffer[i], len));
+}
 /**
  * print_x - prints an unsigned int in lowercase hexadecimal format
  * @args: the argument list
  * @buffer: the buffer to write to
- * @buffer_size: the size of the buffer
  *
  * Return: the number of characters printed
  */
-int print_x(va_list args, char *buffer, int buffer_size)
+int print_x(va_list args, char *buffer)
 {
+	int i = BUFFER_SIZE - 2;
 	unsigned int num = va_arg(args, unsigned int);
-	int len = 0, i;
-	int remainder;
-	char temp;
+	unsigned int len = 0;
 
-	do {
-		remainder = num % 16;
-		if (remainder < 10)
-			buffer[len++] = remainder + '0';
-		else
-			buffer[len++] = remainder - 10 + 'a';
-		num /= 16;
-	} while (num > 0);
-	for (i = 0; i < len / 2; i++)
+	if (num == 0)
 	{
-		temp = buffer[i];
-		buffer[i] = buffer[len - i - 1];
-		buffer[len - i - 1] = temp;
-	}
-	if (len < buffer_size)
-	{
-		for (i = 0; i < len; i++)
-		{
-			buffer[i] = buffer[i];
-		}
-		buffer[len] = '\0';
+		buffer[i--] = '0';
+		len++;
 	}
 	else
-		return (-1);
+	{
+		buffer[BUFFER_SIZE - 1] = '\0';
 
-	return (len);
+		while (num > 0)
+		{
+			int remainder = num % 16;
+
+			if (remainder < 10)
+			{
+				buffer[i--] = remainder + '0';
+			}
+			else
+			{
+				buffer[i--] = remainder - 10 + 'a';
+			}
+			num /= 16;
+			len++;
+		}
+	}
+
+	i++;
+
+	return ((unsigned int)write(1, &buffer[i], len));
 }
+
 /**
- * print_X - prints an unsigned int in lowercase hexadecimal format
+ * print_X - prints an unsigned int in uppercase hexadecimal format
  * @args: the argument list
  * @buffer: the buffer to write to
- * @buffer_size: the size of the buffer
  *
  * Return: the number of characters printed
  */
-int print_X(va_list args, char *buffer, int buffer_size)
+int print_X(va_list args, char *buffer)
 {
+	int i = BUFFER_SIZE - 2;
 	unsigned int num = va_arg(args, unsigned int);
-	int len = 0, i;
-	int remainder;
-	char temp;
+	unsigned int len = 0;
 
-	do {
-		remainder = num % 16;
-		if (remainder < 10)
-			buffer[len++] = remainder + '0';
-		else
-			buffer[len++] = remainder - 10 + 'A';
-		num /= 16;
-	} while (num > 0);
-	for (i = 0; i < len / 2; i++)
+	if (num == 0)
 	{
-		temp = buffer[i];
-		buffer[i] = buffer[len - i - 1];
-		buffer[len - i - 1] = temp;
-	}
-	if (len < buffer_size)
-	{
-		for (i = 0; i < len; i++)
-		{
-			buffer[i] = buffer[i];
-		}
-		buffer[len] = '\0';
+		buffer[i--] = '0';
+		len++;
 	}
 	else
-		return (-1);
+	{
+		buffer[BUFFER_SIZE - 1] = '\0';
 
-	return (len);
+		while (num > 0)
+		{
+			int remainder = num % 16;
+
+			if (remainder < 10)
+			{
+				buffer[i--] = remainder + '0';
+			}
+			else
+			{
+				buffer[i--] = remainder - 10 + 'A';
+			}
+			num /= 16;
+			len++;
+		}
+	}
+
+	i++;
+
+	return ((unsigned int)write(1, &buffer[i], len));
 }
