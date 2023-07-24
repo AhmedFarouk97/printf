@@ -23,7 +23,7 @@ int is_printable(char c)
 int add_hex(char ascii, char *buffer, int i)
 {
 	char map[] = "0123456789ABCDEF";
-	/* The hexa format code is always 2 digits long */
+
 	if (ascii < 0)
 		ascii *= -1;
 
@@ -42,12 +42,13 @@ int add_hex(char ascii, char *buffer, int i)
  *
  * Return: the number of characters printed
  */
-int print_S(va_list args, char *buffer)
+int print_S(va_list args, char *buffer, int flags)
 {
 	int i = 0, offset = 0;
 	char *str = va_arg(args, char *);
 
 	(void)buffer;
+	(void)flags;
 
 	if (str == NULL)
 		return (write(1, "(null)", 6));
@@ -67,19 +68,21 @@ int print_S(va_list args, char *buffer)
 	return (write(1, buffer, i + offset));
 }
 /**
- * print_po - Prints the value of a pointer variable
- * @args: List a of arguments
+ * print_p - Prints the value of a pointer variable
+ * @types: List a of arguments
  * @buffer: Buffer array to handle print
+ * @flags:  Calculates active flags
  *
  * Return: Number of chars printed.
  */
-int print_po(va_list args, char *buffer)
+int print_p(va_list args, char *buffer, int flags)
 {
 	int ind = BUFFER_SIZE - 2;
 	unsigned long num_addrs;
 	char map_to[] = "0123456789abcdef";
 	void *addrs = va_arg(args, void *);
 
+	(void)flags;
 
 	if (addrs == NULL)
 		return (write(1, "(nil)", 5));
