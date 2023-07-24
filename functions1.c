@@ -12,8 +12,7 @@ int print_c(va_list args, char *buffer)
 	char c = va_arg(args, int);
 	int i = 0;
 
-	buffer[i++] = c;
-	buffer[i] = '\0';
+	buffer[i] = c;
 
 	return (write(1, &buffer[0], 1));
 }
@@ -39,7 +38,6 @@ int print_s(va_list args, char *buffer)
 		write(1, &s[i], 1);
 		len++;
 	}
-	write(1, "\0", 1);
 	return (len);
 }
 /**

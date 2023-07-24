@@ -77,6 +77,8 @@ int _printf(const char *format, ...)
 	{
 		if (format[i] == '%')
 		{
+			if (format[i + 1] == '\0' || format[i + 1] == ' ')
+				return (-1);
 			print_buffer(buffer, &buff_ind);
 			++i;
 			printed_char = handle_spec(format, &i, args, buffer);
