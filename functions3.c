@@ -41,16 +41,18 @@ int add_hex(char ascii, char *buffer, int i)
  * @args: the argument list
  * @buffer: pointer to the buffer to print to
  * @flags: add flags
+ * @size: get size
  *
  * Return: the number of characters printed
  */
-int print_S(va_list args, char *buffer, int flags)
+int print_S(va_list args, char *buffer, int flags, int size)
 {
 	int i = 0, offset = 0;
 	char *str = va_arg(args, char *);
 
 	(void)buffer;
 	(void)flags;
+	(void)size;
 
 	if (str == NULL)
 		return (write(1, "(null)", 6));
@@ -74,10 +76,11 @@ int print_S(va_list args, char *buffer, int flags)
  * @args: List a of arguments
  * @buffer: Buffer array to handle print
  * @flags:  Calculates active flags
+ * @size: get size
  *
  * Return: Number of chars printed.
  */
-int print_p(va_list args, char *buffer, int flags)
+int print_p(va_list args, char *buffer, int flags, int size)
 {
 	int ind = BUFFER_SIZE - 2;
 	unsigned long num_addrs;
@@ -85,6 +88,7 @@ int print_p(va_list args, char *buffer, int flags)
 	void *addrs = va_arg(args, void *);
 
 	(void)flags;
+	(void)size;
 
 	if (addrs == NULL)
 		return (write(1, "(nil)", 5));

@@ -26,6 +26,7 @@ int write_num(int ind, int is_negative, char *buffer, int flags)
 		buffer[--ind] = extra_ch;
 	return (write(1, &buffer[ind], length));
 }
+
 /**
  * write_pointer - printing pointer with flags
  * @ind: passed index

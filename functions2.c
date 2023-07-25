@@ -4,56 +4,51 @@
  * @args: List of arguments
  * @buffer: Buffer array to handle print.
  * @flags:  Calculates active flags
+ * @size: gets size
  *
  * Return: Number of printed chars
  */
-int print_u(va_list args, char *buffer, int flags)
+int print_u(va_list args, char *buffer, int flags, int size)
 {
 	int i = BUFFER_SIZE - 2;
-	unsigned int num = va_arg(args, unsigned int);
-	unsigned int len = 0;
+	unsigned long int num = va_arg(args, unsigned long int);
+	int len;
 
 	(void)flags;
+	num = convert_size_unsgnd(num, size);
 	if (num == 0)
-	{
 		buffer[i--] = '0';
-		len++;
-	}
-	else
+	buffer[BUFFER_SIZE - 1] = '\0';
+	while (num > 0)
 	{
-		buffer[BUFFER_SIZE - 1] = '\0';
-
-		while (num > 0)
-		{
-			buffer[i--] = (num % 10) + '0';
-			num /= 10;
-			len++;
-		}
+		buffer[i--] = (num % 10) + '0';
+		num /= 10;
 	}
-
 	i++;
-
-	return ((unsigned int)write(1, &buffer[i], len));
+	len = BUFFER_SIZE - i - 1;
+	return (write(1, &buffer[i], len));
 }
+
 /**
  * print_o - Prints octal
  * @args: List of arguments
  * @buffer: Buffer array to handle print.
  * @flags:  Calculates active flags
+ * @size: gets size
  *
  * Return: Number of printed chars
  */
-int print_o(va_list args, char *buffer, int flags)
+int print_o(va_list args, char *buffer, int flags, int size)
 {
 	int i = BUFFER_SIZE - 2;
 	unsigned long int num = va_arg(args, unsigned int);
 	unsigned long int init_num = num;
 	int len;
 
+	num = convert_size_unsgnd(num, size);
 	if (num == 0)
 		buffer[i--] = '0';
 	buffer[BUFFER_SIZE - 1] = '\0';
-
 	while (num > 0)
 	{
 		buffer[i--] = (num % 8) + '0';
@@ -63,7 +58,6 @@ int print_o(va_list args, char *buffer, int flags)
 		buffer[i--] = '0';
 	i++;
 	len = BUFFER_SIZE - i - 1;
-
 	return (write(1, &buffer[i], len));
 }
 /**
@@ -71,10 +65,11 @@ int print_o(va_list args, char *buffer, int flags)
  * @args: the argument list
  * @buffer: the buffer to write to
  * @flags:  Calculates active flags
+ * @size: gets size
  *
  * Return: the number of characters printed
  */
-int print_x(va_list args, char *buffer, int flags)
+int print_x(va_list args, char *buffer, int flags, int size)
 {
 	int i = BUFFER_SIZE - 2;
 	unsigned long int num = va_arg(args, unsigned int);
@@ -82,23 +77,20 @@ int print_x(va_list args, char *buffer, int flags)
 	char map[] = "0123456789abcdef";
 	int len;
 
+	num = convert_size_unsgnd(num, size);
 	if (num == 0)
 		buffer[i--] = '0';
-
 	buffer[BUFFER_SIZE - 1] = '\0';
-
 	while (num > 0)
 	{
 		buffer[i--] = map[num % 16];
 		num /= 16;
 	}
-
 	if (flags & F_HASH && init_num != 0)
 	{
 		buffer[i--] = 'x';
 		buffer[i--] = '0';
 	}
-
 	i++;
 	len = BUFFER_SIZE - i - 1;
 	return (write(1, &buffer[i], len));
@@ -109,10 +101,11 @@ int print_x(va_list args, char *buffer, int flags)
  * @args: the argument list
  * @buffer: the buffer to write to
  * @flags:  Calculates active flags
+ * @size: gets size
  *
  * Return: the number of characters printed
  */
-int print_X(va_list args, char *buffer, int flags)
+int print_X(va_list args, char *buffer, int flags, int size)
 {
 	int i = BUFFER_SIZE - 2;
 	unsigned long int num = va_arg(args, unsigned int);
@@ -120,23 +113,20 @@ int print_X(va_list args, char *buffer, int flags)
 	char map[] = "0123456789ABCDEF";
 	int len;
 
+	num = convert_size_unsgnd(num, size);
 	if (num == 0)
 		buffer[i--] = '0';
-
 	buffer[BUFFER_SIZE - 1] = '\0';
-
 	while (num > 0)
 	{
 		buffer[i--] = map[num % 16];
 		num /= 16;
 	}
-
 	if (flags & F_HASH && init_num != 0)
 	{
 		buffer[i--] = 'X';
 		buffer[i--] = '0';
 	}
-
 	i++;
 	len = BUFFER_SIZE - i - 1;
 	return (write(1, &buffer[i], len));

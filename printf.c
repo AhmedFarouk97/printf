@@ -19,11 +19,12 @@ void print_buffer(char buffer[], int *buff_ind)
  * @ind: ind.
  * @buffer: Buffer array to handle print.
  * @flags:  Calculates active flags
+ * @size: get size
  *
  * Return: 1 or 2;
  */
 int handle_spec(const char *format, int *ind, va_list args, char *buffer,
-		int flags)
+		int flags, int size)
 {
 	int i, unknow_len = 0, printed_chars = -1;
 	spec_t specifiers[] = {
@@ -35,7 +36,7 @@ int handle_spec(const char *format, int *ind, va_list args, char *buffer,
 	};
 	for (i = 0; specifiers[i].spec; i++)
 		if (format[*ind] == specifiers[i].spec)
-			return (specifiers[i].f(args, buffer, flags));
+			return (specifiers[i].f(args, buffer, flags, size));
 
 	if (specifiers[i].spec == '\0')
 	{
@@ -59,7 +60,7 @@ int handle_spec(const char *format, int *ind, va_list args, char *buffer,
 int _printf(const char *format, ...)
 {
 	int i, printed_char = 0, len = 0;
-	int flags;
+	int flags, size;
 	int buff_ind = 0;
 	va_list args;
 	char buffer[BUFFER_SIZE];
@@ -77,8 +78,9 @@ int _printf(const char *format, ...)
 				return (-1);
 			print_buffer(buffer, &buff_ind);
 			flags = get_flags(format, &i);
+			size = get_size(format, &i);
 			++i;
-			printed_char = handle_spec(format, &i, args, buffer, flags);
+			printed_char = handle_spec(format, &i, args, buffer, flags, size);
 			if (printed_char == -1)
 				return (-1);
 			len += printed_char;
