@@ -31,7 +31,7 @@ int handle_spec(const char *format, int *ind, va_list args, char *buffer,
 		{'c', print_c}, {'s', print_s}, {'%', print_5},
 		{'d', print_d}, {'i', print_d}, {'b', print_b},
 		{'u', print_u}, {'o', print_o}, {'x', print_x},
-		{'X', print_X}, {'S', print_s}, {'p', print_p},
+		{'X', print_X}, {'S', print_S}, {'p', print_p},
 		{'\0', NULL}
 	};
 	for (i = 0; specifiers[i].spec; i++)
