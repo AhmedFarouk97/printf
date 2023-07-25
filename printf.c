@@ -20,11 +20,13 @@ void print_buffer(char buffer[], int *buff_ind)
  * @buffer: Buffer array to handle print.
  * @flags:  Calculates active flags
  * @size: get size
+ * @precision: get precisoin
+ * @width: gets width
  *
  * Return: 1 or 2;
  */
 int handle_spec(const char *format, int *ind, va_list args, char *buffer,
-		int flags, int size)
+		int flags, int size, int precision, int width)
 {
 	int i, unknow_len = 0, printed_chars = -1;
 	spec_t specifiers[] = {
@@ -36,8 +38,8 @@ int handle_spec(const char *format, int *ind, va_list args, char *buffer,
 	};
 	for (i = 0; specifiers[i].spec; i++)
 		if (format[*ind] == specifiers[i].spec)
-			return (specifiers[i].f(args, buffer, flags, size));
-
+			return (specifiers[i].f(args, buffer, flags,
+						size, percision, width));
 	if (specifiers[i].spec == '\0')
 	{
 		if (format[*ind] == '\0')
@@ -45,6 +47,15 @@ int handle_spec(const char *format, int *ind, va_list args, char *buffer,
 		unknow_len += write(1, "%%", 1);
 		if (format[*ind - 1] == ' ')
 			unknow_len += write(1, " ", 1);
+		else if (width)
+		{
+			*ind -= 1;
+			while (fmt[*ind] != ' ' && fmt[*ind] != '%')
+				*ind -= 1;
+			if (fmt[*ind] == ' ')
+				*ind -= 1;
+			return (1);
+		}
 		unknow_len += write(1, &format[*ind], 1);
 		return (unknow_len);
 	}
@@ -60,16 +71,14 @@ int handle_spec(const char *format, int *ind, va_list args, char *buffer,
 int _printf(const char *format, ...)
 {
 	int i, printed_char = 0, len = 0;
-	int flags, size;
+	int flags, size, precision, width;
 	int buff_ind = 0;
 	va_list args;
 	char buffer[BUFFER_SIZE];
 
 	if (format == NULL)
 		return (-1);
-
 	va_start(args, format);
-
 	for (i = 0; format && format[i] != '\0'; i++)
 	{
 		if (format[i] == '%')
@@ -79,8 +88,11 @@ int _printf(const char *format, ...)
 			print_buffer(buffer, &buff_ind);
 			flags = get_flags(format, &i);
 			size = get_size(format, &i);
+			precision = get_precision(format, &i, args);
+			width = get_width(format, &i, args);
 			++i;
-			printed_char = handle_spec(format, &i, args, buffer, flags, size);
+			printed_char = handle_spec(format, &i, args, buffer, flags,
+					size, precision, width);
 			if (printed_char == -1)
 				return (-1);
 			len += printed_char;
@@ -93,10 +105,7 @@ int _printf(const char *format, ...)
 			len++;
 		}
 	}
-
 	print_buffer(buffer, &buff_ind);
-
 	va_end(args);
-
 	return (len);
 }

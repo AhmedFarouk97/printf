@@ -13,6 +13,9 @@ int write_num(int ind, int is_negative, char *buffer, int flags)
 	int length = BUFFER_SIZE - ind - 1;
 	char extra_ch = 0;
 
+	if (ind == BUFF_SIZE - 2 && buffer[ind] == '0')
+	return (0);
+
 	if (is_negative)
 		extra_ch = '-';
 	else if (flags & F_SPACE)
