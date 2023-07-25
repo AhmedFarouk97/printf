@@ -16,17 +16,6 @@ int main(void) {
     void *addr;
 
 
-    /* Test the '+' and 'space' flags with '%d' and '%i' */
-	printf("Testing + and ' ' flag with _printf:\n");
-    _printf("%+d %+i %+p % d % i % p", 42382, -38437, 42, 0);
-	putchar('\n');
-	printf("Testing + and ' ' flag with printf:\n");
-    printf("%+d %+i %+p % d % i % p", 42382, -38437, 42, 0);
-    /* Test the '#' flag with '%o', '%x', and '%X' */
-	printf("Testing # flag with _prinf:\n");
-    _printf("%#o %#x %#X\n", 42, 42, 42);
-	printf("Testing # flag with prinf:\n");
-    printf("%#o %#x %#X\n", 42, 42, 42);
 
     len = _printf("Let's try to printf a simple sentence.\n");
     len2 = printf("Let's try to printf a simple sentence.\n");
@@ -98,6 +87,17 @@ int main(void) {
     _printf("%hX\n", 0xABCDEF);
     printf("%hX\n", 0xABCDEF);
 	putchar('\n');
+
+    /* Test the '+' and 'space' flags with '%d' and '%i' */
+	printf("Testing + and ' ' flag with _printf:\n");
+    _printf("%+d %+i %+p % d % i % p", 42382, -38437, 42, 32, 55, 12);
+	putchar('\n');
+	printf("Testing + and ' ' flag with printf:\n");
+	putchar('\n');
+    /* Test the '#' flag with '%o', '%x', and '%X' */
+	printf("Testing # flag with _prinf:\n");
+    _printf("%#o %#x %#X\n", 42, 42, 42);
+	printf("Testing # flag with prinf:\n");
 
     return (0);
 
