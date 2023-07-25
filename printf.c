@@ -39,7 +39,7 @@ int handle_spec(const char *format, int *ind, va_list args, char *buffer,
 	for (i = 0; specifiers[i].spec; i++)
 		if (format[*ind] == specifiers[i].spec)
 			return (specifiers[i].f(args, buffer, flags,
-						size, percision, width));
+						size, precision, width));
 	if (specifiers[i].spec == '\0')
 	{
 		if (format[*ind] == '\0')
@@ -50,9 +50,9 @@ int handle_spec(const char *format, int *ind, va_list args, char *buffer,
 		else if (width)
 		{
 			*ind -= 1;
-			while (fmt[*ind] != ' ' && fmt[*ind] != '%')
+			while (format[*ind] != ' ' && format[*ind] != '%')
 				*ind -= 1;
-			if (fmt[*ind] == ' ')
+			if (format[*ind] == ' ')
 				*ind -= 1;
 			return (1);
 		}
