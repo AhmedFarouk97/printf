@@ -84,8 +84,11 @@ int print_p(va_list args, char *buffer, int flags)
 	char map_to[] = "0123456789abcdef";
 	void *addrs = va_arg(args, void *);
 
+	(void)flags;
+
 	if (addrs == NULL)
 		return (write(1, "(nil)", 5));
+
 	buffer[BUFFER_SIZE - 1] = '\0';
 
 	num_addrs = (unsigned long)addrs;
@@ -96,6 +99,7 @@ int print_p(va_list args, char *buffer, int flags)
 	}
 	buffer[ind--] = 'x';
 	buffer[ind--] = '0';
+
 	ind++;
-	return (write_num(ind, 0, buffer, flags));
+	return (write_pointer(ind, buffer, flags));
 }
