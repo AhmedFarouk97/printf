@@ -18,6 +18,7 @@ int is_printable(char c)
  * @buffer: Array of chars.
  * @i: Index at which to start appending.
  * @ascii: ASSCI CODE.
+ *
  * Return: Always 3
  */
 int add_hex(char ascii, char *buffer, int i)
@@ -39,6 +40,7 @@ int add_hex(char ascii, char *buffer, int i)
  * print_S - prints a string
  * @args: the argument list
  * @buffer: pointer to the buffer to print to
+ * @flags: add flags
  *
  * Return: the number of characters printed
  */
@@ -69,7 +71,7 @@ int print_S(va_list args, char *buffer, int flags)
 }
 /**
  * print_p - Prints the value of a pointer variable
- * @types: List a of arguments
+ * @args: List a of arguments
  * @buffer: Buffer array to handle print
  * @flags:  Calculates active flags
  *
