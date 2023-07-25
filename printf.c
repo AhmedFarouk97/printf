@@ -47,15 +47,6 @@ int handle_spec(const char *format, int *ind, va_list args, char *buffer,
 		unknow_len += write(1, "%%", 1);
 		if (format[*ind - 1] == ' ')
 			unknow_len += write(1, " ", 1);
-		else if (width)
-		{
-			--(*ind);
-			while (format[*ind] != ' ' && format[*ind] != '%')
-				--(*ind);
-			if (format[*ind] == ' ')
-				--(*ind);
-			return (1);
-		}
 		unknow_len += write(1, &format[*ind], 1);
 		return (unknow_len);
 	}
