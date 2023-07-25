@@ -63,7 +63,6 @@ int print_S(va_list args, char *buffer, int flags, int size)
 			buffer[i + offset] = str[i];
 		else
 			offset += add_hex(str[i], buffer, i + offset);
-
 		i++;
 	}
 
@@ -87,7 +86,6 @@ int print_p(va_list args, char *buffer, int flags, int size)
 	char map_to[] = "0123456789abcdef";
 	void *addrs = va_arg(args, void *);
 
-	(void)flags;
 	(void)size;
 
 	if (addrs == NULL)

@@ -50,7 +50,7 @@ int get_size(const char *format, int *i);
 
 int write_num(int ind, int is_negative, char *buffer, int flags);
 long int convert_size_number(long int num, int size);
-int write_pointer(int ind, char *buffer, int flags);
 long int convert_size_unsgnd(unsigned long int num, int size);
+int write_pointer(int ind, char *buffer, int flags);
 
 #endif /* MAIN_H */

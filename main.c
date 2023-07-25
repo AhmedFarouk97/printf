@@ -90,7 +90,7 @@ int main(void) {
 
     /* Test the '+' and 'space' flags with '%d' and '%i' */
 	printf("Testing + and ' ' flag with _printf:\n");
-    _printf("%+d %+i %+p % d % i % p", 42382, -38437, 42, 32, 55, 12);
+    _printf("%d %d %d %d %d");
 	putchar('\n');
 	printf("Testing + and ' ' flag with printf:\n");
 	putchar('\n');
@@ -98,7 +98,6 @@ int main(void) {
 	printf("Testing # flag with _prinf:\n");
     _printf("%#o %#x %#X\n", 42, 42, 42);
 	printf("Testing # flag with prinf:\n");
-
     return (0);
 
 }
