@@ -85,7 +85,9 @@ int print_p(va_list args, char *buffer, int flags, int size)
 	unsigned long num_addrs;
 	char map_to[] = "0123456789abcdef";
 	void *addrs = va_arg(args, void *);
+	int len;
 
+	(void)flags;
 	(void)size;
 
 	if (addrs == NULL)
@@ -103,5 +105,6 @@ int print_p(va_list args, char *buffer, int flags, int size)
 	buffer[ind--] = '0';
 
 	ind++;
-	return (write_pointer(ind, buffer, flags));
+	len = BUFFER_SIZE - ind - 1;
+	return (write(1, &buffer[ind], len));
 }
