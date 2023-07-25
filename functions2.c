@@ -77,7 +77,7 @@ int print_o(va_list args, char *buffer, int flags)
 int print_x(va_list args, char *buffer, int flags)
 {
 	int i = BUFFER_SIZE - 2;
-	unsigned long int num = va_arg(args, unsigned long int);
+	unsigned long int num = va_arg(args, unsigned int);
 	unsigned long int init_num = num;
 	char map[] = "0123456789abcdef";
 	int len;
@@ -115,7 +115,7 @@ int print_x(va_list args, char *buffer, int flags)
 int print_X(va_list args, char *buffer, int flags)
 {
 	int i = BUFFER_SIZE - 2;
-	unsigned long int num = va_arg(args, unsigned long int);
+	unsigned long int num = va_arg(args, unsigned int);
 	unsigned long int init_num = num;
 	char map[] = "0123456789ABCDEF";
 	int len;
