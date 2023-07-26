@@ -5,7 +5,7 @@
  * @buffer: Array of chars
  * @buff_ind: Index at which to add next char, represents the length.
  */
-void print_buffer(char buffer[], int *buff_ind)
+void print_buffer(char *buffer, int *buff_ind)
 {
 	if (*buff_ind > 0)
 		write(1, &buffer[0], *buff_ind);
@@ -23,10 +23,10 @@ void print_buffer(char buffer[], int *buff_ind)
  *
  * Return: 1 or 2;
  */
-int handle_spec(const char *format, int *ind, va_list args, char *buffer,
+int handle_spec(const char *format, int ind, va_list args, char *buffer,
 		int flags, int size)
 {
-	int i, unknow_len = 0, printed_chars = -1;
+	int i, unknow_len = 0;
 	spec_t specifiers[] = {
 		{'c', print_c}, {'s', print_s}, {'%', print_5},
 		{'d', print_d}, {'i', print_d}, {'b', print_b},
@@ -35,20 +35,18 @@ int handle_spec(const char *format, int *ind, va_list args, char *buffer,
 		{'\0', NULL}
 	};
 	for (i = 0; specifiers[i].spec; i++)
-		if (format[*ind] == specifiers[i].spec)
+		if (format[ind + 1] == specifiers[i].spec)
 			return (specifiers[i].f(args, buffer, flags, size));
 
 	if (specifiers[i].spec == '\0')
 	{
-		if (format[*ind] == '\0')
+		if (format[ind + 1] == '\0')
 			return (-1);
 		unknow_len += write(1, "%%", 1);
-		if (format[*ind - 1] == ' ')
-			unknow_len += write(1, " ", 1);
-		unknow_len += write(1, &format[*ind], 1);
+		unknow_len += write(1, &format[ind + 1], 1);
 		return (unknow_len);
 	}
-	return (printed_chars);
+	return (-1);
 }
 
 
@@ -70,17 +68,15 @@ int _printf(const char *format, ...)
 
 	va_start(args, format);
 
-	for (i = 0; format && format[i] != '\0'; i++)
+	for (i = 0; format[i]; i++)
 	{
 		if (format[i] == '%')
 		{
-			if (format[i + 1] == '\0')
-				return (-1);
 			print_buffer(buffer, &buff_ind);
 			flags = get_flags(format, &i);
 			size = get_size(format, &i);
+			printed_char = handle_spec(format, i, args, buffer, flags, size);
 			++i;
-			printed_char = handle_spec(format, &i, args, buffer, flags, size);
 			if (printed_char == -1)
 				return (-1);
 			len += printed_char;
