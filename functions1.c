@@ -25,7 +25,7 @@ int print_c(va_list args, int flags)
 int print_s(va_list args, int flags)
 {
 	char *s = va_arg(args, char*);
-	int len, i = 0;
+	int len;
 	char buffer[BUFFER_SIZE];
 
 	(void)flags;
@@ -35,7 +35,7 @@ int print_s(va_list args, int flags)
 		buffer[len] = s[len];
 	buffer[len] = '\0';
 
-	return (write(1, &buffer[i], len));
+	return (write(1, buffer, len));
 }
 /**
  * print_5 - print percent
