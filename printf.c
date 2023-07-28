@@ -42,8 +42,6 @@ int handle_spec(const char *format, int *ind, va_list args)
 		if (format[*ind + 1] == '\0')
 			return (-1);
 		unknow_len += write(1, "%%", 1);
-		if (format[*ind] == ' ')
-			unknow_len += write(1, " ", 1);
 		unknow_len += write(1, &format[*ind + 1], 1);
 		return (unknow_len);
 	}
