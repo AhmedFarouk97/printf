@@ -110,7 +110,7 @@ int print_b(va_list args, int flags)
 
 	(void)flags;
 	if (n == 0)
-		buffer[i] = '0';
+		buffer[i++] = '0';
 	while (n > 0)
 	{
 		buffer[i] = (n % 2) + '0';
