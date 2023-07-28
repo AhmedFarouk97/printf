@@ -9,12 +9,10 @@
 
 #define BUFFER_SIZE 1024
 
-#define F_PLUS 2
-#define F_HASH 8
-#define F_SPACE 16
+#define PLUS 1
+#define SPACE 2
+#define HASH 3
 
-#define S_LONG 2
-#define S_SHORT 1
 /**
  * struct specifier - Struct to map format specifiers to their corresponding
  * printing function
@@ -25,32 +23,24 @@
 typedef struct specifier
 {
 	char spec;
-	int (*f)(va_list, char *, int, int);
+	int (*f)(va_list, int);
 } spec_t;
 
-void print_buffer(char buffer[], int *buff_ind);
-
+void print_buffer(char *buffer, int *buff_ind);
 int _printf(const char *format, ...);
-int print_c(va_list args, char *buffer, int flags, int size);
-int print_s(va_list args, char *buffer, int flags, int size);
-int print_5(va_list args, char *buffer, int flags, int size);
-int print_d(va_list args, char *buffer, int flags, int size);
-int print_b(va_list args, char *buffer, int flags, int size);
-int print_u(va_list args, char *buffer, int flags, int size);
-int print_o(va_list args, char *buffer, int flags, int size);
-int print_x(va_list args, char *buffer, int flags, int size);
-int print_X(va_list args, char *buffer, int flags, int size);
-int print_S(va_list args, char *buffer, int flags, int size);
-int print_p(va_list args, char *buffer, int flags, int size);
 
-int _putchar(char c);
+int print_c(va_list args, int flags);
+int print_s(va_list args, int flags);
+int print_5(va_list args, int flags);
+int print_d(va_list args, int flags);
+int print_b(va_list args, int flags);
+int print_u(va_list args, int flags);
+int print_o(va_list args, int flags);
+int print_x(va_list args, int flags);
+int print_X(va_list args, int flags);
+int print_S(va_list args, int flags);
+int print_p(va_list args, int flags);
 
-int get_flags(const char *format, int *i);
-int get_size(const char *format, int *i);
-
-int write_num(int ind, int is_negative, char *buffer, int flags);
-long int convert_size_number(long int num, int size);
-int write_pointer(int ind, char *buffer, int flags);
-long int convert_size_unsgnd(unsigned long int num, int size);
+int get_flags(const char *format, int *ind);
 
 #endif /* MAIN_H */

@@ -2,132 +2,142 @@
 /**
  * print_u - Prints an unsigned number
  * @args: List of arguments
- * @buffer: Buffer array to handle print.
- * @flags:  Calculates active flags
- * @size: gets size
+ * @flags: get flags
  *
  * Return: Number of printed chars
  */
-int print_u(va_list args, char *buffer, int flags, int size)
+int print_u(va_list args, int flags)
 {
-	int i = BUFFER_SIZE - 2;
-	unsigned long int num = va_arg(args, unsigned long int);
-	int len;
+	int i = 0, len, temp, j = 0;
+	unsigned long int n = va_arg(args, unsigned int);
+	char buffer[BUFFER_SIZE];
 
 	(void)flags;
-	num = convert_size_unsgnd(num, size);
-	if (num == 0)
-		buffer[i--] = '0';
-	buffer[BUFFER_SIZE - 1] = '\0';
-	while (num > 0)
+	if (n == 0)
+		buffer[i] = '0';
+	while (n > 0)
 	{
-		buffer[i--] = (num % 10) + '0';
-		num /= 10;
+		buffer[i] = (n % 10) + '0';
+		n /= 10;
+		i++;
 	}
-	i++;
-	len = BUFFER_SIZE - i - 1;
-	return (write(1, &buffer[i], len));
+	len = i;
+	while (i > j + 1)
+	{
+		temp = buffer[j];
+		buffer[j] = buffer[i - 1];
+		buffer[i - 1] = temp;
+		i--;
+		j++;
+	}
+	buffer[len] = '\0';
+	return (write(1, buffer, len));
 }
 
 /**
  * print_o - Prints octal
  * @args: List of arguments
- * @buffer: Buffer array to handle print.
- * @flags:  Calculates active flags
- * @size: gets size
+ * @flags: get flags
  *
  * Return: Number of printed chars
  */
-int print_o(va_list args, char *buffer, int flags, int size)
+int print_o(va_list args, int flags)
 {
-	int i = BUFFER_SIZE - 2;
-	unsigned long int num = va_arg(args, unsigned int);
-	unsigned long int init_num = num;
-	int len;
+	unsigned long int n = va_arg(args, unsigned int);
+	unsigned long int num = n;
+	char buffer[BUFFER_SIZE];
+	int i = 0, j = 0, temp, len;
 
-	num = convert_size_unsgnd(num, size);
-	if (num == 0)
-		buffer[i--] = '0';
-	buffer[BUFFER_SIZE - 1] = '\0';
-	while (num > 0)
+	if (n == 0)
+		buffer[i++] = '0';
+	while (n > 0)
 	{
-		buffer[i--] = (num % 8) + '0';
-		num /= 8;
+		buffer[i] = (n % 8) + '0';
+		n /= 8;
+		i++;
 	}
-	if (flags & F_HASH && init_num != 0)
-		buffer[i--] = '0';
-	i++;
-	len = BUFFER_SIZE - i - 1;
-	return (write(1, &buffer[i], len));
+	if (flags == HASH && num != 0)
+		buffer[i++] = '0';
+	len = i;
+	while (i > j + 1)
+	{
+		temp = buffer[j];
+		buffer[j] = buffer[i - 1];
+		buffer[i - 1] = temp;
+		i--;
+		j++;
+	}
+	buffer[len] = '\0';
+	return (write(1, buffer, len));
+}
+
+/**
+ * print_hex - prints an unsigned int in lowercase hexadecimal format
+ * @flags: get flags
+ * @n: passed number
+ * @map: passed map
+ * @str: passed string
+ *
+ * Return: the number of characters printed
+ */
+int print_hex(unsigned long int n, char *map, int flags, char *str)
+{
+	char buffer[BUFFER_SIZE];
+	unsigned long int num = n;
+	int i = 0, j = 0, temp, len;
+
+	if (n == 0)
+		buffer[i++] = '0';
+	while (n > 0)
+	{
+		buffer[i] = map[n % 16];
+		n /= 16;
+		i++;
+	}
+	if (flags == HASH && num != 0)
+	{
+		buffer[i++] = str[1];
+		buffer[i++] = str[0];
+	}
+	len = i;
+	while (i > j + 1)
+	{
+		temp = buffer[j];
+		buffer[j] = buffer[i - 1];
+		buffer[i - 1] = temp;
+		i--;
+		j++;
+	}
+	buffer[len] = '\0';
+	return (write(1, buffer, len));
 }
 /**
  * print_x - prints an unsigned int in lowercase hexadecimal format
  * @args: the argument list
- * @buffer: the buffer to write to
- * @flags:  Calculates active flags
- * @size: gets size
+ * @flags: get flags
  *
  * Return: the number of characters printed
  */
-int print_x(va_list args, char *buffer, int flags, int size)
+int print_x(va_list args, int flags)
 {
-	int i = BUFFER_SIZE - 2;
-	unsigned long int num = va_arg(args, unsigned int);
-	unsigned long int init_num = num;
+	unsigned long int n = va_arg(args, unsigned int);
 	char map[] = "0123456789abcdef";
-	int len;
+	char *str = "0x";
 
-	num = convert_size_unsgnd(num, size);
-	if (num == 0)
-		buffer[i--] = '0';
-	buffer[BUFFER_SIZE - 1] = '\0';
-	while (num > 0)
-	{
-		buffer[i--] = map[num % 16];
-		num /= 16;
-	}
-	if (flags & F_HASH && init_num != 0)
-	{
-		buffer[i--] = 'x';
-		buffer[i--] = '0';
-	}
-	i++;
-	len = BUFFER_SIZE - i - 1;
-	return (write(1, &buffer[i], len));
+	return (print_hex(n, map, flags, str));
 }
-
 /**
  * print_X - prints an unsigned int in uppercase hexadecimal format
  * @args: the argument list
- * @buffer: the buffer to write to
- * @flags:  Calculates active flags
- * @size: gets size
+ * @flags: get flags
  *
  * Return: the number of characters printed
  */
-int print_X(va_list args, char *buffer, int flags, int size)
+int print_X(va_list args, int flags)
 {
-	int i = BUFFER_SIZE - 2;
-	unsigned long int num = va_arg(args, unsigned int);
-	unsigned long int init_num = num;
+	unsigned long int n = va_arg(args, unsigned int);
 	char map[] = "0123456789ABCDEF";
-	int len;
+	char *str = "0X";
 
-	num = convert_size_unsgnd(num, size);
-	if (num == 0)
-		buffer[i--] = '0';
-	buffer[BUFFER_SIZE - 1] = '\0';
-	while (num > 0)
-	{
-		buffer[i--] = map[num % 16];
-		num /= 16;
-	}
-	if (flags & F_HASH && init_num != 0)
-	{
-		buffer[i--] = 'X';
-		buffer[i--] = '0';
-	}
-	i++;
-	len = BUFFER_SIZE - i - 1;
-	return (write(1, &buffer[i], len));
+	return (print_hex(n, map, flags, str));
 }

@@ -3,140 +3,127 @@
 /**
  * print_c - prints a char
  * @args: the argument list
- * @buffer: pointer to the buffer to print to
- * @flags:  Calculates active flags
- * @size: gets size
+ * @flags: get flags
  *
  * Return: the number of characters printed
  */
-int print_c(va_list args, char *buffer, int flags, int size)
+int print_c(va_list args, int flags)
 {
 	char c = va_arg(args, int);
-	int i = 0;
 
 	(void)flags;
-	(void)size;
-	buffer[i] = c;
-
-	return (write(1, &buffer[0], 1));
+	return (write(1, &c, 1));
 }
 
 /**
  * print_s - prints a string
  * @args: the argument list
- * @buffer: pointer to the buffer to print to
- * @flags:  Calculates active flags
- * @size: gets size
+ * @flags: get flags
  *
  * Return: the number of characters printed
  */
-int print_s(va_list args, char *buffer, int flags, int size)
+int print_s(va_list args, int flags)
 {
 	char *s = va_arg(args, char*);
-	int len = 0, i;
+	int len, i = 0;
+	char buffer[BUFFER_SIZE];
 
-	(void)buffer;
 	(void)flags;
-	(void)size;
-
 	if (s == NULL)
 		s = "(null)";
-	for (i = 0; s[i]; i++)
-	{
-		write(1, &s[i], 1);
-		len++;
-	}
-	return (len);
+	for (len = 0; s[len]; len++)
+		buffer[len] = s[len];
+	buffer[len] = '\0';
+
+	return (write(1, &buffer[i], len));
 }
 /**
  * print_5 - print percent
  * @args: the argument list
- * @buffer: pointer to the buffer to print to
- * @flags:  Calculates active flags
- * @size: gets size
+ * @flags: get flags
  *
  * Return: the number of characters printed
  */
-int print_5(va_list args, char *buffer, int flags, int size)
+int print_5(va_list args, int flags)
 {
 	(void)args;
-	(void)buffer;
 	(void)flags;
-	(void)size;
-
 	return (write(1, "%", 1));
 }
 /**
  * print_d - Prints a number
  * @args: List of arguments
- * @buffer: Buffer array to handle print.
- * @flags:  Calculates active flags
- * @size: gets size
+ * @flags: get flags
  *
  * Return: Number of printed chars
  */
-int print_d(va_list args, char *buffer, int flags, int size)
+int print_d(va_list args, int flags)
 {
-	int i = BUFFER_SIZE - 2;
-	long int n = va_arg(args, long int);
+	int i = 0, len, temp, j = 0;
+	long int n = va_arg(args, int);
 	int is_negative = 0;
-	unsigned long int num;
+	char buffer[BUFFER_SIZE];
 
-	n = convert_size_number(n, size);
 	if (n == 0)
-		buffer[i--] = '0';
-	buffer[BUFFER_SIZE - 1] = '\0';
-	num = (unsigned long int)n;
+		buffer[i++] = '0';
 	if (n < 0)
 	{
-		num = (unsigned long int)((-1) * n);
 		is_negative = 1;
+		n = -n;
 	}
-	while (num > 0)
+	while (n > 0)
 	{
-		buffer[i--] = (num % 10) + '0';
-		num /= 10;
+		buffer[i] = (n % 10) + '0';
+		n /= 10;
+		i++;
 	}
-	i++;
-	return (write_num(i, is_negative, buffer, flags));
+	if (is_negative)
+		buffer[i++] = '-';
+	else if (flags & PLUS)
+		buffer[i++] = '+';
+	else if (flags & SPACE)
+		buffer[i++] = ' ';
+	len = i;
+
+	while (i > j + 1)
+	{
+		temp = buffer[j];
+		buffer[j] = buffer[i - 1];
+		buffer[i - 1] = temp;
+		i--;
+		j++;
+	}
+	return (write(1, &buffer[0], len));
 }
 /**
  * print_b - Prints an unsigned number
  * @args: Lista of arguments
- * @buffer: Buffer array to handle print
- * @flags:  Calculates active flags
- * @size: gets size
+ * @flags: get flags
  *
  * Return: Numbers of char printed.
  */
-int print_b(va_list args, char *buffer, int flags, int size)
+int print_b(va_list args, int flags)
 {
-	unsigned int n, m, i, sum;
-	unsigned int a[32];
-	int len;
+	unsigned int n = va_arg(args, int);
+	char buffer[BUFFER_SIZE];
+	int i = 0, j = 0, temp, len;
 
-	(void)buffer;
 	(void)flags;
-	(void)size;
-
-	n = va_arg(args, unsigned int);
-	m = 2147483648;
-	a[0] = n / m;
-	for (i = 1; i < 32; i++)
+	while (n > 0)
 	{
-		m /= 2;
-		a[i] = (n / m) % 2;
+		buffer[i] = (n % 2) + '0';
+		n /= 2;
+		i++;
 	}
-	for (i = 0, sum = 0, len = 0; i < 32; i++)
+	len = i;
+	while (i > j + 1)
 	{
-		sum += a[i];
-		if (sum || i == 31)
-		{
-			char z = '0' + a[i];
-
-			write(1, &z, 1);
-			len++;
-		}
+		temp = buffer[j];
+		buffer[j] = buffer[i - 1];
+		buffer[i - 1] = temp;
+		i--;
+		j++;
 	}
-	return (len);
+	buffer[len] = '\0';
+	return (write(1, buffer, len));
 }

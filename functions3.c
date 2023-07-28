@@ -39,21 +39,17 @@ int add_hex(char ascii, char *buffer, int i)
 /**
  * print_S - prints a string
  * @args: the argument list
- * @buffer: pointer to the buffer to print to
- * @flags: add flags
- * @size: get size
+ * @flags: get flags
  *
  * Return: the number of characters printed
  */
-int print_S(va_list args, char *buffer, int flags, int size)
+int print_S(va_list args, int flags)
 {
 	int i = 0, offset = 0;
 	char *str = va_arg(args, char *);
+	char buffer[BUFFER_SIZE];
 
-	(void)buffer;
 	(void)flags;
-	(void)size;
-
 	if (str == NULL)
 		return (write(1, "(null)", 6));
 
@@ -74,35 +70,39 @@ int print_S(va_list args, char *buffer, int flags, int size)
 /**
  * print_p - Prints the value of a pointer variable
  * @args: List a of arguments
- * @buffer: Buffer array to handle print
- * @flags:  Calculates active flags
- * @size: get size
+ * @flags: get flags
  *
  * Return: Number of chars printed.
  */
-int print_p(va_list args, char *buffer, int flags, int size)
+int print_p(va_list args, int flags)
 {
-	int ind = BUFFER_SIZE - 2;
-	unsigned long num_addrs;
-	char map_to[] = "0123456789abcdef";
 	void *addrs = va_arg(args, void *);
+	unsigned long n;
+	char map[] = "0123456789abcdef";
+	char buffer[BUFFER_SIZE];
+	int i = 0, j = 0, len, temp;
 
-	(void)size;
-
+	(void)flags;
 	if (addrs == NULL)
 		return (write(1, "(nil)", 5));
-
-	buffer[BUFFER_SIZE - 1] = '\0';
-
-	num_addrs = (unsigned long)addrs;
-	while (num_addrs > 0)
+	n = (unsigned long)addrs;
+	while (n > 0)
 	{
-		buffer[ind--] = map_to[num_addrs % 16];
-		num_addrs /= 16;
+		buffer[i] = map[n % 16];
+		n /= 16;
+		i++;
 	}
-	buffer[ind--] = 'x';
-	buffer[ind--] = '0';
-
-	ind++;
-	return (write_pointer(ind, buffer, flags));
+	buffer[i++] = 'x';
+	buffer[i++] = '0';
+	len = i;
+	while (i > j + 1)
+	{
+		temp = buffer[j];
+		buffer[j] = buffer[i - 1];
+		buffer[i - 1] = temp;
+		i--;
+		j++;
+	}
+	buffer[len] = '\0';
+	return (write(1, buffer, len));
 }

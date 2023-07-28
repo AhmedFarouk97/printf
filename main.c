@@ -40,5 +40,7 @@ int main(void)
     printf("Len:[%d]\n", len2);
     _printf("Unknown:[%r]\n");
 	_printf("%S\n", "Best\nSchool");
+	_printf("_pirntf:\n%#o, %#x, %#X\n", 0, 0, 0);
+	printf("_pirntf:\n%#o, %#x, %#X\n", 0, 0, 0);
     return (0);
 }
