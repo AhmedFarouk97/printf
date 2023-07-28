@@ -63,8 +63,7 @@ int _printf(const char *format, ...)
 
 	if (format == NULL)
 		return (-1);
-	if (format[i + 1] == '\0' || format[i + 1] == ' ')
-		return (-1);
+
 	va_start(args, format);
 	for (i = 0; format[i]; i++)
 	{
