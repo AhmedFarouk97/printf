@@ -50,7 +50,7 @@ int print_5(va_list args, int flags)
 {
 	(void)args;
 	(void)flags;
-	return (write(1, "%", 1));
+	return (write(1, "%%", 1));
 }
 /**
  * print_d - Prints a number
