@@ -93,7 +93,7 @@ int print_d(va_list args, int flags)
 		i--;
 		j++;
 	}
-	return (write(1, &buffer[0], len));
+	return (write(1, buffer, len));
 }
 /**
  * print_b - Prints an unsigned number
