@@ -33,7 +33,6 @@ int print_s(va_list args, int flags)
 		s = "(null)";
 	for (len = 0; s[len]; len++)
 		buffer[len] = s[len];
-	buffer[len] = '\0';
 
 	return (write(1, buffer, len));
 }
