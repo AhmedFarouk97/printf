@@ -30,7 +30,8 @@ int print_s(va_list args, int flags)
 	(void)flags;
 	if (s == NULL)
 		s = "(null)";
-	for (len = 0; s[len]; len++);
+	for (len = 0; s[len]; len++)
+	;
 
 	return (write(1, s, len));
 }
