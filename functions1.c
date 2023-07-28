@@ -26,18 +26,13 @@ int print_s(va_list args, int flags)
 {
 	char *s = va_arg(args, char*);
 	int len;
-	char buffer[BUFFER_SIZE];
 
 	(void)flags;
 	if (s == NULL)
-	{
 		s = "(null)";
-		len = 6;
-	}
-	for (len = 0; s[len]; len++)
-		buffer[len] = s[len];
+	for (len = 0; s[len]; len++);
 
-	return (write(1, buffer, len));
+	return (write(1, s, len));
 }
 /**
  * print_5 - print percent
