@@ -30,7 +30,10 @@ int print_s(va_list args, int flags)
 
 	(void)flags;
 	if (s == NULL)
+	{
 		s = "(null)";
+		len = 6;
+	}
 	for (len = 0; s[len]; len++)
 		buffer[len] = s[len];
 
