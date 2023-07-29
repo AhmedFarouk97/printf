@@ -93,10 +93,6 @@ int print_p(va_list args, int flags)
 	}
 	buffer[i++] = 'x';
 	buffer[i++] = '0';
-	if (flags & PLUS)
-		buffer[i++] = '+';
-	else if (flags & SPACE)
-		buffer[i++] = ' ';
 	len = i;
 	while (i > j + 1)
 	{
