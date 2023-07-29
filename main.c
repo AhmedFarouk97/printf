@@ -12,6 +12,7 @@ int main(void)
     int len;
     int len2;
     unsigned int ui;
+	unsigned int n = UINT_MAX;
     void *addr;
 
     len = _printf("Let's try to printf a simple sentence.\n");
@@ -40,7 +41,12 @@ int main(void)
     printf("Len:[%d]\n", len2);
     _printf("Unknown:[%r]\n");
 	_printf("%S\n", "Best\nSchool");
-	_printf("_pirntf:\n%#o, %#x, %#X\n", 0, 0, 0);
-	printf("_pirntf:\n%#o, %#x, %#X\n", 0, 0, 0);
+	_printf("_pirntf:\n%#o, %#x, %#X\n", 0, n, ui);
+	printf("_pirntf:\n%#o, %#x, %#X\n", 0, n, ui);
+
+	_printf("_pirntf:\n% c, % p, % d\n", 50, 0, 2147483648);
+	printf("pirntf:\n% c, % p, % d\n", 50, 0, 2147483648);
+	_printf("_pirntf:\n%+c, %+p, %+d\n", 50, 0, 2147483648);
+	printf("pirntf:\n%+c, %+p, %+d\n", 50, 0, 2147483648);
     return (0);
 }
