@@ -77,10 +77,13 @@ int print_d(va_list args, int flags)
 	}
 	if (is_negative)
 		buffer[i++] = '-';
-	else if (flags & PLUS)
+	else if (flags == (PLUS | SPACE))
 		buffer[i++] = '+';
-	else if (flags & SPACE)
+	else if (flags == PLUS)
+		buffer[i++] = '+';
+	else if (flags == SPACE)
 		buffer[i++] = ' ';
+
 	len = i;
 
 	while (i > j + 1)
@@ -106,40 +109,23 @@ int print_b(va_list args, int flags)
 	char buffer[BUFFER_SIZE];
 	int i = 0, j = 0, temp, len;
 
-	if (!flags)
+	(void)flags;
+	if (n == 0)
+		buffer[i++] = '0';
+	for (i = 0; n > 0; i++)
 	{
-		if (n == 0)
-			buffer[i++] = '0';
-		for (i = 0; n > 0; i++)
-		{
-			buffer[i] = (n % 2) + '0';
-			n /= 2;
-		}
+		buffer[i] = (n % 2) + '0';
+		n /= 2;
 	}
-	else
+	len = i;
+	while (i > j + 1)
 	{
-		if (flags & PLUS)
-		{
-			buffer[i++] = 'b';
-			buffer[i++] = '+';
-			buffer[i++] = '%';
-		}
-		else if (flags & SPACE)
-		{
-			buffer[i++] = 'b';
-			buffer[i++] = ' ';
-			buffer[i++] = '%';
-		}
+		temp = buffer[j];
+		buffer[j] = buffer[i - 1];
+		buffer[i - 1] = temp;
+		i--;
+		j++;
 	}
-		len = i;
-		while (i > j + 1)
-		{
-			temp = buffer[j];
-			buffer[j] = buffer[i - 1];
-			buffer[i - 1] = temp;
-			i--;
-			j++;
-		}
-		buffer[len] = '\0';
+	buffer[len] = '\0';
 	return (write(1, buffer, len));
 }

@@ -19,7 +19,7 @@ int get_flags(const char *format, int *ind)
 		{
 			if (format[i] == FLAGS_CH[j])
 			{
-				flags = FLAGS_ARR[j];
+				flags |= FLAGS_ARR[j];
 				break;
 			}
 		}
