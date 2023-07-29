@@ -12,6 +12,7 @@ void print_buffer(char *buffer, int *buff_ind)
 
 	*buff_ind = 0;
 }
+
 /**
  * handle_spec - Prints an argument based on its type
  * @format: Formatted string in which to print the arguments.
@@ -47,7 +48,6 @@ int handle_spec(const char *format, int *ind, va_list args)
 	}
 	return (-1);
 }
-
 
 /**
  * _printf - Printf function

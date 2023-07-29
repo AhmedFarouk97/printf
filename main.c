@@ -44,9 +44,9 @@ int main(void)
 	_printf("_pirntf:\n%#o, %#x, %#X\n", 0, n, ui);
 	printf("_pirntf:\n%#o, %#x, %#X\n", 0, n, ui);
 
-	_printf("_pirntf:\n% c, % p, % d\n", 50, 0, 2147483648);
-	printf("pirntf:\n% c, % p, % d\n", 50, 0, 2147483648);
-	_printf("_pirntf:\n%+c, %+p, %+d\n", 50, 0, 2147483648);
-	printf("pirntf:\n%+c, %+p, %+d\n", 50, 0, 2147483648);
+	_printf("_pirntf:\n% c, % b, % d\n", 50, 98, 214);
+	printf("pirntf:\n% c, % b, % d\n", 50, 98, 214);
+	_printf("_pirntf:\n%+c, %+b, %+d\n", 50, 98, 214);
+	printf("pirntf:\n%+c, %+b, %+d\n", 50, 98, 214);
     return (0);
 }

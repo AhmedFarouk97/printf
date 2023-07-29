@@ -106,24 +106,40 @@ int print_b(va_list args, int flags)
 	char buffer[BUFFER_SIZE];
 	int i = 0, j = 0, temp, len;
 
-	(void)flags;
-	if (n == 0)
-		buffer[i++] = '0';
-	while (n > 0)
+	if (!flags)
 	{
-		buffer[i] = (n % 2) + '0';
-		n /= 2;
-		i++;
+		if (n == 0)
+			buffer[i++] = '0';
+		for (i = 0; n > 0; i++)
+		{
+			buffer[i] = (n % 2) + '0';
+			n /= 2;
+		}
 	}
-	len = i;
-	while (i > j + 1)
+	else
 	{
-		temp = buffer[j];
-		buffer[j] = buffer[i - 1];
-		buffer[i - 1] = temp;
-		i--;
-		j++;
+		if (flags & PLUS)
+		{
+			buffer[i++] = 'b';
+			buffer[i++] = '+';
+			buffer[i++] = '%';
+		}
+		else if (flags & SPACE)
+		{
+			buffer[i++] = 'b';
+			buffer[i++] = ' ';
+			buffer[i++] = '%';
+		}
 	}
-	buffer[len] = '\0';
+		len = i;
+		while (i > j + 1)
+		{
+			temp = buffer[j];
+			buffer[j] = buffer[i - 1];
+			buffer[i - 1] = temp;
+			i--;
+			j++;
+		}
+		buffer[len] = '\0';
 	return (write(1, buffer, len));
 }
