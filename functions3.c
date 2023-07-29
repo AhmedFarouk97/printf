@@ -82,6 +82,7 @@ int print_p(va_list args, int flags)
 	char buffer[BUFFER_SIZE];
 	int i = 0, j = 0, len, temp;
 
+	(void)flags;
 	if (addrs == NULL)
 		return (write(1, "(nil)", 5));
 	n = (unsigned long)addrs;
