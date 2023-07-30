@@ -24,7 +24,7 @@ void print_buffer(char *buffer, int *buff_ind)
 int handle_spec(const char *format, int *ind, va_list args)
 {
 	int i, unknow_len = 0;
-	int flags;
+	int flags, size;
 	spec_t specifiers[] = {
 		{'c', print_c}, {'s', print_s}, {'%', print_5},
 		{'d', print_d}, {'i', print_d}, {'b', print_b},
@@ -34,9 +34,10 @@ int handle_spec(const char *format, int *ind, va_list args)
 	};
 
 	flags = get_flags(format, ind);
+	size = get_size(format, ind);
 	for (i = 0; specifiers[i].spec; i++)
 		if (format[*ind + 1] == specifiers[i].spec)
-			return (specifiers[i].f(args, flags));
+			return (specifiers[i].f(args, flags, size));
 
 	if (specifiers[i].spec == '\0')
 	{

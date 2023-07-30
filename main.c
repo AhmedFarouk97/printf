@@ -42,10 +42,22 @@ int main(void)
     _printf("Unknown:[%r]\n");
 	_printf("%S\n", "Best\nSchool");
 	_printf("_pirntf:\n%#o, %#x, %#X\n", 0, n, ui);
-	printf("_pirntf:\n%#o, %#x, %#X\n", 0, n, ui);
+	printf("_pirntf:\n%#o, %#x, %#X\n\n", 0, n, ui);
 
-	_printf("% +d + %+ d = % +i\n", INT_MIN, INT_MAX, (INT_MIN + INT_MAX));
-	printf("% +d + %+ d = % +i\n", INT_MIN, INT_MAX, (INT_MIN + INT_MAX));
+	_printf("%hd, %d, %ld\n", LONG_MAX, LONG_MAX, LONG_MAX);
+	printf("%hd, %d, %ld\n", LONG_MAX, LONG_MAX, LONG_MAX); 
+
+	_printf("%hu, %d, %lu\n", ULONG_MAX, ULONG_MAX, ULONG_MAX);
+	printf("%hu, %d, %lu\n", ULONG_MAX, ULONG_MAX, ULONG_MAX);
+
+	_printf("%ho, %o, %lo\n", ULONG_MAX, ULONG_MAX, ULONG_MAX);
+	printf("%ho, %o, %lo\n", ULONG_MAX, ULONG_MAX, ULONG_MAX);
+	
+	_printf("%hx, %x, %lx\n", ULONG_MAX, ULONG_MAX, ULONG_MAX);
+	printf("%hx, %x, %lx\n", ULONG_MAX, ULONG_MAX, ULONG_MAX);
+
+	_printf("%hX, %X, %lX\n", ULONG_MAX, ULONG_MAX, ULONG_MAX);
+	printf("%hX, %X, %lX\n", ULONG_MAX, ULONG_MAX, ULONG_MAX);
 
 	return (0);
 }

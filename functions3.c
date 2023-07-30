@@ -40,16 +40,18 @@ int add_hex(char ascii, char *buffer, int i)
  * print_S - prints a string
  * @args: the argument list
  * @flags: get flags
+ * @size: get size
  *
  * Return: the number of characters printed
  */
-int print_S(va_list args, int flags)
+int print_S(va_list args, int flags, int size)
 {
 	int i = 0, offset = 0;
 	char *str = va_arg(args, char *);
 	char buffer[BUFFER_SIZE];
 
 	(void)flags;
+	(void)size;
 	if (str == NULL)
 		return (write(1, "(null)", 6));
 
@@ -71,10 +73,11 @@ int print_S(va_list args, int flags)
  * print_p - Prints the value of a pointer variable
  * @args: List a of arguments
  * @flags: get flags
+ * @size: get size
  *
  * Return: Number of chars printed.
  */
-int print_p(va_list args, int flags)
+int print_p(va_list args, int flags, int size)
 {
 	void *addrs = va_arg(args, void *);
 	unsigned long n;
@@ -83,6 +86,7 @@ int print_p(va_list args, int flags)
 	int i = 0, j = 0, len, temp;
 
 	(void)flags;
+	(void)size;
 	if (addrs == NULL)
 		return (write(1, "(nil)", 5));
 	n = (unsigned long)addrs;

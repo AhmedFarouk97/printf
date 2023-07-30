@@ -29,3 +29,28 @@ int get_flags(const char *format, int *ind)
 	*ind = i - 1;
 	return (flags);
 }
+
+/**
+ * get_size - Calculates the size to cast the argument
+ * @format: Formatted string in which to print the arguments
+ * @ind: List of arguments to be printed.
+ *
+ * Return: Precision.
+ */
+int get_size(const char *format, int *ind)
+{
+	int i = *ind + 1;
+	int size = 0;
+
+	if (format[i] == 'l')
+		size = LONG;
+	else if (format[i] == 'h')
+		size = SHORT;
+
+	if (size == 0)
+		*ind = i - 1;
+	else
+		*ind = i;
+
+	return (size);
+}

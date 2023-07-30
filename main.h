@@ -13,6 +13,9 @@
 #define SPACE 2
 #define HASH 3
 
+#define LONG 2
+#define SHORT 1
+
 /**
  * struct specifier - Struct to map format specifiers to their corresponding
  * printing function
@@ -23,24 +26,27 @@
 typedef struct specifier
 {
 	char spec;
-	int (*f)(va_list, int);
+	int (*f)(va_list, int, int);
 } spec_t;
 
 void print_buffer(char *buffer, int *buff_ind);
 int _printf(const char *format, ...);
 
-int print_c(va_list args, int flags);
-int print_s(va_list args, int flags);
-int print_5(va_list args, int flags);
-int print_d(va_list args, int flags);
-int print_b(va_list args, int flags);
-int print_u(va_list args, int flags);
-int print_o(va_list args, int flags);
-int print_x(va_list args, int flags);
-int print_X(va_list args, int flags);
-int print_S(va_list args, int flags);
-int print_p(va_list args, int flags);
+int print_c(va_list args, int flags, int size);
+int print_s(va_list args, int flags, int size);
+int print_5(va_list args, int flags, int size);
+int print_d(va_list args, int flags, int size);
+int print_b(va_list args, int flags, int size);
+int print_u(va_list args, int flags, int size);
+int print_o(va_list args, int flags, int size);
+int print_x(va_list args, int flags, int size);
+int print_X(va_list args, int flags, int size);
+int print_S(va_list args, int flags, int size);
+int print_p(va_list args, int flags, int size);
 
 int get_flags(const char *format, int *ind);
+int get_size(const char *format, int *ind);
 
+int convert_uint(unsigned long int num, int size);
+int convert_int(long int num, int size);
 #endif /* MAIN_H */
