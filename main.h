@@ -47,6 +47,6 @@ int print_p(va_list args, int flags, int size);
 int get_flags(const char *format, int *ind);
 int get_size(const char *format, int *ind);
 
-int convert_uint(unsigned long int num, int size);
-int convert_int(long int num, int size);
+long int convert_uint(unsigned long int num, int size);
+long int convert_int(long int num, int size);
 #endif /* MAIN_H */

@@ -6,7 +6,7 @@
  *
  * Return: num
  */
-int convert_int(long int num, int size)
+long int convert_int(long int num, int size)
 {
 	if (size == LONG)
 		return (num);
@@ -22,7 +22,7 @@ int convert_int(long int num, int size)
  *
  * Return: num
  */
-int convert_uint(unsigned long int num, int size)
+long int convert_uint(unsigned long int num, int size)
 {
 	if (size == LONG)
 		return (num);

@@ -7,57 +7,28 @@
  *
  * Return: Always 0
  */
+
 int main(void)
 {
-    int len;
-    int len2;
-    unsigned int ui;
-	unsigned int n = UINT_MAX;
-    void *addr;
+    short int si = SHRT_MAX;
+    int i = INT_MAX;
+    long int li = LONG_MAX;
+    unsigned short int usi = USHRT_MAX;
+    unsigned int ui = UINT_MAX;
+    unsigned long int uli = ULONG_MAX;
 
-    len = _printf("Let's try to printf a simple sentence.\n");
-    len2 = printf("Let's try to printf a simple sentence.\n");
-    ui = (unsigned int)INT_MAX + 1024;
-    addr = (void *)0x7ffe637541f0;
-    _printf("Length:[%d, %i]\n", len, len);
-    printf("Length:[%d, %i]\n", len2, len2);
-    _printf("Negative:[%d]\n", -762534);
-    printf("Negative:[%d]\n", -762534);
-    _printf("Unsigned:[%u]\n", ui);
-    printf("Unsigned:[%u]\n", ui);
-    _printf("Unsigned octal:[%o]\n", ui);
-    printf("Unsigned octal:[%o]\n", ui);
-    _printf("Unsigned hexadecimal:[%x, %X]\n", ui, ui);
-    printf("Unsigned hexadecimal:[%x, %X]\n", ui, ui);
-    _printf("Character:[%c]\n", 'H');
-    printf("Character:[%c]\n", 'H');
-    _printf("String:[%s]\n", "I am a string !");
-    printf("String:[%s]\n", "I am a string !");
-    _printf("Address:[%p]\n", addr);
-    printf("Address:[%p]\n", addr);
-    len = _printf("Percent:[%%]\n");
-    len2 = printf("Percent:[%%]\n");
-    _printf("Len:[%d]\n", len);
-    printf("Len:[%d]\n", len2);
-    _printf("Unknown:[%r]\n");
-	_printf("%S\n", "Best\nSchool");
-	_printf("_pirntf:\n%#o, %#x, %#X\n", 0, n, ui);
-	printf("_pirntf:\n%#o, %#x, %#X\n\n", 0, n, ui);
-
-	_printf("%hd, %d, %ld\n", LONG_MAX, LONG_MAX, LONG_MAX);
-	printf("%hd, %d, %ld\n", LONG_MAX, LONG_MAX, LONG_MAX); 
-
-	_printf("%hu, %d, %lu\n", ULONG_MAX, ULONG_MAX, ULONG_MAX);
-	printf("%hu, %d, %lu\n", ULONG_MAX, ULONG_MAX, ULONG_MAX);
-
-	_printf("%ho, %o, %lo\n", ULONG_MAX, ULONG_MAX, ULONG_MAX);
-	printf("%ho, %o, %lo\n", ULONG_MAX, ULONG_MAX, ULONG_MAX);
-	
-	_printf("%hx, %x, %lx\n", ULONG_MAX, ULONG_MAX, ULONG_MAX);
-	printf("%hx, %x, %lx\n", ULONG_MAX, ULONG_MAX, ULONG_MAX);
-
-	_printf("%hX, %X, %lX\n", ULONG_MAX, ULONG_MAX, ULONG_MAX);
-	printf("%hX, %X, %lX\n", ULONG_MAX, ULONG_MAX, ULONG_MAX);
-
-	return (0);
+    /* Test the h flag with integer conversions */
+    printf("Short int: %hd\n", si); /* Should print "si: 32767" */
+    _printf("Short int: %hd\n", si); /* Should print "si: 32767" */
+    printf("int: %d\n", i); /* Should print "i: 2147483647" */
+    _printf("int: %d\n", i); /* Should print "i: 2147483647" */
+    printf("Long int: %ld\n", li); /* Should print "li: 9223372036854775807" */
+    _printf("Long int: %ld\n", li); /* Should print "li: 9223372036854775807" */
+    printf("Unsigned short int: %hu\n", usi); /* Should print "usi: 65535" */
+    _printf("Unsigned short int: %hu\n", usi); /* Should print "usi: 65535" */
+    printf("Unsigned int: %u\n", ui); /* Should print "ui: 4294967295" */
+    _printf("Unsigned int: %u\n", ui); /* Should print "ui: 4294967295" */
+    printf("Unsigned long int: %lu\n", uli); /* Should print "uli: 18446744073709551615" */
+	_printf("Unsigned long int: %lu\n", uli); /* Should print "uli: 18446744073709551615" */
+    return (0);
 }
